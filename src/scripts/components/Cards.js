@@ -107,10 +107,17 @@ const Cards = React.createClass({
   render() {
     function source(s) {
       if (!s || !s.label) return
+      var icon = '';
+      if (s.icon) {
+        icon = <img src={s.icon} alt="Could not fetch icon" width="100" height="100" />
+      }
 
-      return (<div className="card-source">
-        Source: <a href={s.url || "#"} onClick={e => this.toggleClickedLinks(e)}> {s.label}</a>
-        </div>);
+      return (
+        <div className="card-source">
+          Source: <a href={s.url || "#"} onClick={e => this.toggleClickedLinks(e)}> {s.label}</a>
+          {icon}
+        </div>
+      );
     }
     var cards = this.props.decisions.get('cards')
       .sort((b, a) => indicators[a.indicator] - indicators[b.indicator])
