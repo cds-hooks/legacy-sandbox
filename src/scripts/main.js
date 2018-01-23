@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom';
 import CDS_SMART_OBJ from '../smart_authentication.js';
 import querystring from 'querystring';
 import FhirServerStore from './stores/FhirServerStore';
+import axios from 'axios';
 import $ from 'jquery';
 
 
@@ -29,13 +30,31 @@ CDS_SMART_OBJ.fetchContext().then(
     CDS_SMART_OBJ.processedContext = true;
     ReactDOM.render(<App/>, document.getElementById('react-wrapper'));
   }, () => {
-    var qs = querystring.parse(window.location.search.slice(1))
-    var fhirContext = {
-      patient: qs.patientId || "SMART-1288992",
-      baseUrl: qs.fhirServiceUrl || runtime.FHIR_URL
+    var qs = querystring.parse(window.location.search.slice(1));
+
+    function renderApp() {
+      var fhirContext = {
+        patient: qs.patientId || "SMART-1288992",
+        baseUrl: qs.fhirServiceUrl || runtime.FHIR_URL
+      }
+      FhirServerStore.setContext(fhirContext, true);
+      CDS_SMART_OBJ.processedContext = true;
+      ReactDOM.render(<App/>, document.getElementById('react-wrapper'));
     }
-    FhirServerStore.setContext(fhirContext, true);
-    CDS_SMART_OBJ.processedContext = true;
-    ReactDOM.render(<App/>, document.getElementById('react-wrapper'));
+
+    axios({
+      method: 'get',
+      url: `${qs.fhirServiceUrl || runtime.FHIR_URL}/metadata`,
+      headers: {'Accept': 'application/json+fhir'}
+    }).then((result) => {
+      if (result.data && result.data.fhirVersion) {
+        CDS_SMART_OBJ.fhirVersion = result.data.fhirVersion;
+      }
+      renderApp();
+    }).catch(() => {
+      // Set to default FHIR server version
+      CDS_SMART_OBJ.fhirVersion = '1.0.2';
+      renderApp();
+    });
   }
 );

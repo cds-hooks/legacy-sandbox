@@ -4,6 +4,7 @@ import DrugStore from './DrugStore'
 import HookStore from './HookStore'
 import FhirServerStore from './FhirServerStore'
 import moment from 'moment'
+import CDS_SMART_OBJ from '../../smart_authentication'
 
 var assign = require('object-assign')
 var AppDispatcher = require('../dispatcher/AppDispatcher')
@@ -28,20 +29,22 @@ function _rxChanged() {
 }
 
 function toFhir(props) {
+  // Use to check if FHIR server is STU3, otherwise construct MedicationOrder/Request resource based on DSTU2 spec
+  var isSTU3 = CDS_SMART_OBJ.fhirVersion === '3.0.1';
   var resource = {
-    "resourceType": "MedicationOrder"
-  }
-  resource.dateWritten = moment().format("YYYY-MM-DD")
+    "resourceType": isSTU3 ? "MedicationRequest" : "MedicationOrder"
+  };
+  resource[`${isSTU3 ? 'authoredOn': 'dateWritten'}`] = moment().format("YYYY-MM-DD");
   var startDate, endDate;
   if (props.dates.start && props.dates.start.enabled)
     startDate= moment(props.dates.start.value).format("YYYY-MM-DD")
   if (props.dates.end && props.dates.end.enabled)
     endDate = moment(props.dates.end.value).format("YYYY-MM-DD")
 
-  resource.status = "draft"
-  resource.patient = {
+  resource.status = "draft";
+  resource[`${isSTU3 ? 'subject' : 'patient'}`] = {
     "reference": "Patient/" + props.fhirServer.getIn(['context', 'patient'])
-  }
+  };
   if (props.drug && props.drug.get('step') === "done") {
     var freqs = {
       'daily': 1,
@@ -62,14 +65,14 @@ function toFhir(props) {
           repeat: {
             frequency: freqs[sig.frequency],
             period: 1,
-            periodUnits: "d"
           }
         }
       }];
+      resource.dosageInstruction[0].timing.repeat[`${isSTU3 ? 'periodUnit' : 'periodUnits'}`] = "d";
       if (startDate || endDate){
         resource.dosageInstruction[0].timing.repeat.boundsPeriod = {
-            start: startDate,
-            end: endDate
+          start: startDate,
+          end: endDate
         }
       }
     }
@@ -88,7 +91,7 @@ function toFhir(props) {
 
   var reason = FhirServerStore.getSelectionAsFhir()
   if (reason) {
-    resource.reasonCodeableConcept = reason
+    resource[`${isSTU3 ? 'reasonCode' : 'reasonCodeableConcept'}`] = reason;
   }
   return Immutable.fromJS(resource)
 }
