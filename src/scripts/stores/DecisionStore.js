@@ -206,12 +206,12 @@ function addCardsFrom(callCount, hookUrl, result) {
 
   var cards = result.cards || [];
   cards = Immutable.fromJS(cards)
-             .map((v, k) => v.set('key', cardKey++)
+             .map((v, k) => v.set('key', v.get('key') || cardKey++)
                              .set('suggestions', v.get('suggestions', []).map(s => s
-                                 .set("key", cardKey++)
+                                 .set("key", s.get('key') || cardKey++)
                                  .set("suggestionUrl", hookUrl + "/analytics/" + s.get("uuid"))))
                              .set('links', v.get('links', []).map(s => s
-                                 .set("key", cardKey++))
+                                 .set("key", s.get('key') || cardKey++))
                               )).toJS();
 
   var newCards = state.get('cards').push(...cards);

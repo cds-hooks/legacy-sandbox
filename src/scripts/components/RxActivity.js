@@ -48,7 +48,10 @@ const RxActivity = React.createClass({
         </div>
 
         <div className="decision-spacer"></div>
-        <Cards className="card-holder" decisions={this.props.all.get('decisions')} context={this.props.all.getIn(['fhirServer', 'context'])} />
+        <Cards className="card-holder"
+               decisions={this.props.all.get('decisions')}
+               context={this.props.all.getIn(['fhirServer', 'context'])}
+               toggleLaunchErrorModal={this.props.toggleLaunchErrorModal} />
       </div>
       <FhirView {...this.props} hook='medication-prescribe' />
     </div>
