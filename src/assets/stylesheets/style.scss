@@ -223,6 +223,7 @@ pre {
   width: 100%;
   height: 100vh;
   padding: 60px 0;
+  table-layout: fixed;
 }
 
 .view-title {
@@ -794,14 +795,14 @@ table.drug-choice {
 .card-render-view-container {
   width: 50%;
   height: 100%;
-  display: inline-block;
+  display: table-cell;
   vertical-align: top;
   padding: 10px;
 }
 
 .card-render-json-container {
   width: 50%;
-  display: inline-block;
+  display: table-cell;
   height: 100%;
   border-left: 1px solid #000000;
   padding: 10px;

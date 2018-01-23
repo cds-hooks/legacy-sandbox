@@ -34,8 +34,7 @@ const CardRenderActivity = React.createClass({
                 "See SMART app for more details.",
       "source": {
         "label": "Medicine Library",
-        "url": "https://example.com",
-        "icon": "https://example.com/img/icon-100px.png"
+        "url": "https://example.com"
       },
       "links": [
         {
@@ -86,9 +85,14 @@ const CardRenderActivity = React.createClass({
   renderedCard() {
     function source(s) {
       if (!s || !s.label) return
+      var icon = '';
+      if (s.icon) {
+        icon = <img src={s.icon} alt="Could not fetch icon" width="100" height="100" />
+      }
 
       return <div className="card-source">
         Source: <a className='fake-link'>{s.label}</a>
+        {icon}
       </div>
     }
 
