@@ -6,10 +6,10 @@ import PatientViewStore from './PatientViewStore'
 import FhirServerStore from './FhirServerStore'
 import HookStore from './HookStore'
 import moment from 'moment'
-import uuid from 'node-uuid'
 import { getIn, paramsToJson } from '../../../mock-cds-backend/utils.js'
 import CDS_SMART_OBJ from '../../smart_authentication';
 import $ from 'jquery';
+import queryString from 'query-string';
 
 var AppDispatcher = require('../dispatcher/AppDispatcher')
 var JWT = require('jsrsasign');
@@ -17,6 +17,7 @@ var EventEmitter = require('events').EventEmitter
 var assign = require('object-assign')
 var Immutable = require('immutable')
 var DELAY = 0; // no delay to apply hooks
+const uuidv4 = require('uuid/v4');
 
 HookStore.addChangeListener(_hooksChanged)
 FhirServerStore.addChangeListener(_hooksChanged)
@@ -35,10 +36,19 @@ function getFhirContext() {
 }
 
 function fillTemplate(template, context) {
-  var flat = JSON.stringify(template)
-  .replace(/{{\s*Patient\.id\s*}}/g, context["Patient.id"])
-  return JSON.parse(flat)
+  var flat = template.replace(/{{\s*Patient\.id\s*}}/g, context["Patient.id"]).toString();
+  if (flat.split('?').length > 1) {
+    var splitUrl = flat.split('?');
+    var queryParams = queryString.parse(splitUrl[1]);
+    Object.keys(queryParams).forEach((key) => {
+      queryParams[key] = encodeURIComponent(queryParams[key]);
+    });
+    splitUrl[1] = queryString.stringify(queryParams, { encode: false });
+    return splitUrl.join('?');
+  }
+  return flat;
 }
+
 function _externalAppReturned() {
   console.log("Handling external return by re-running hooks")
   callHooks(state)
@@ -112,7 +122,7 @@ function _hooksChanged() {
 }
 
 
-var _hookUuid = uuid.v4()
+var _hookUuid = uuidv4();
 
 var idService = {
   createIds() {
@@ -132,7 +142,7 @@ function hookBody(h, fhir, prefetch) {
   var serviceId = h.get('id')
   var ret = {
     hook: h.get('hook'),
-    hookInstance: uuid.v4(),
+    hookInstance: uuidv4(),
     fhirServer: FhirServerStore.getState().getIn(['context', 'baseUrl']),
     redirect: _base + "service-done.html",
     user: FhirServerStore.getState().getIn(['context', 'user']) || "Practitioner/example",
@@ -263,7 +273,7 @@ function callHooks(localState) {
       aud: hookUrl,
       exp: Math.round((Date.now() / 1000) + 3600),
       iat: Math.round((Date.now() / 1000)),
-      jti: uuid.v4()
+      jti: uuidv4()
     });
     var header = JSON.stringify({
       alg: 'ES256',

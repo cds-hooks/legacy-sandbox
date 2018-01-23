@@ -5,7 +5,6 @@ import DrugStore from './DrugStore'
 import HookStore from './HookStore'
 import DecisionStore from './DecisionStore'
 import moment from 'moment'
-import uuid from 'node-uuid'
 import FhirServerStore from './FhirServerStore'
 import { getIn, paramsToJson } from '../../../mock-cds-backend/utils.js'
 
