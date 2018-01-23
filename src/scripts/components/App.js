@@ -248,6 +248,14 @@ const App = React.createClass({
     });
   },
 
+  toggleLaunchErrorModal: function() {
+    this.setState({ showLaunchErrorModal: !this.state.showLaunchErrorModal });
+  },
+
+  hideLaunchErrorModal: function() {
+    this.setState({ showLaunchErrorModal: false });
+  },
+
   render() {
     var hook = (this.state.all.getIn(['decisions', 'hook']))
     var rxClass = hook === "medication-prescribe" ? "nav-button activity-on" : "nav-button activity-off"
@@ -274,6 +282,19 @@ const App = React.createClass({
                        onClick={this.patientSelected.bind(this, 'BILIBABY')}
                        active={this.state.patientId === 'BILIBABY'}>Male | DOB: 2016-01-04</ListGroupItem>
       </ListGroup>);
+
+    var launchErrorModal = (
+      <Modal show={this.state.showLaunchErrorModal} onHide={this.hideLaunchErrorModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            Cannot launch the SMART application. See developer console for more details.
+          </div>
+        </Modal.Body>
+      </Modal>
+    );
 
     var patientModalAlert = this.state.showPatientEntryError ?
       (<Alert bsStyle="danger">
@@ -376,11 +397,14 @@ const App = React.createClass({
                     isMainHooksView={this.state.isMainHooksView}
                     toggleCardRenderTemplate={this.toggleCardRenderTemplate} />
 
+        {launchErrorModal}
+
         {/*Main Hooks View*/}
         {
           this.state.isMainHooksView && hook === 'medication-prescribe'
           && <RxActivity toggleConsoleLog={this.setConsoleLogSetting}
                          toggleServiceView={this.setServiceContextViewSetting}
+                         toggleLaunchErrorModal={this.toggleLaunchErrorModal}
                          isConsoleLogEnabled={this.state.consoleLogSettingEnabled}
                          isServiceViewEnabled={this.state.serviceContextViewEnabled}
                          all={this.state.all}/>
@@ -389,6 +413,7 @@ const App = React.createClass({
           this.state.isMainHooksView && hook === 'patient-view'
           && <PatientViewActivity toggleConsoleLog={this.setConsoleLogSetting}
                                   toggleServiceView={this.setServiceContextViewSetting}
+                                  toggleLaunchErrorModal={this.toggleLaunchErrorModal}
                                   isConsoleLogEnabled={this.state.consoleLogSettingEnabled}
                                   isServiceViewEnabled={this.state.serviceContextViewEnabled}
                                   all={this.state.all}/>
