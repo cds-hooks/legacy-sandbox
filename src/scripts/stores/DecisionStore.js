@@ -259,7 +259,7 @@ function callHooks(localState) {
 
   function buildJwt(hookUrl, data) {
     var payload = JSON.stringify({
-      iss: 'http://sandbox.cds-hooks.org',
+      iss: `${window.location.protocol}//sandbox.cds-hooks.org`,
       aud: hookUrl,
       exp: Math.round((Date.now() / 1000) + 3600),
       iat: Math.round((Date.now() / 1000)),
@@ -280,21 +280,22 @@ function callHooks(localState) {
   localState.get('prefetch')
     .then((prefetch) => {
       var results = applicableServices.map((h, hookUrl) => {
-          return jwtPromise(h.get('url'), buildJwt).then(
-            (val) => {
-              return axios({
-                url: h.get('url'),
-                method: 'post',
-                data: hookBody(h,
-                  localState.get('fhir') && localState.get('fhir').toJS(),
-                  prefetch),
-                headers: {
-                  'Authorization': 'Bearer ' + val,
-                  'Content-Type': 'application/json'
-                }
-              });
-            }
-          )
+        ret = $.Deferred();
+        return jwtPromise(h.get('url'), buildJwt).then(
+          (val) => {
+            return axios({
+              url: h.get('url'),
+              method: 'post',
+              data: hookBody(h,
+                localState.get('fhir') && localState.get('fhir').toJS(),
+                prefetch),
+              headers: {
+                'Authorization': 'Bearer ' + val,
+                'Content-Type': 'application/json'
+              }
+            });
+          }
+        )
       }
       ).forEach((p, hookUrl) => p.then((result) => {
         if (typeof result === 'string' || result instanceof String) { result = {}; }

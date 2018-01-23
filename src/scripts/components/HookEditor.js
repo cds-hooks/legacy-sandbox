@@ -177,7 +177,7 @@ const HookEditor = React.createClass({
         });
       }
 
-      var serviceFetchResponse = HookStore.checkValidService(checkUrl, dfd);
+      var serviceFetchResponse = HookStore.checkAndStoreValidService(checkUrl, dfd);
 
       serviceFetchResponse.then(function(result) {
         if (result.status === 200) {
@@ -187,10 +187,6 @@ const HookEditor = React.createClass({
               this.setServiceResponseBanner('empty');
             } else {
               this.setServiceResponseBanner('success');
-              AppDispatcher.dispatch({
-                type: ActionTypes.QUICK_ADD_HOOK,
-                url: this.state.discoveryEndpoint
-              });
             }
           }
           dfd = $.Deferred();
