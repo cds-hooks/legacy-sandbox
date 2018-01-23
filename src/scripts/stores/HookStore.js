@@ -8,8 +8,9 @@ import ActionTypes from '../actions/ActionTypes'
 import defaultHooks from './HookStore.defaults'
 import { schema, paramsToJson } from '../../../mock-cds-backend/utils.js'
 import CDS_SMART_OBJ from '../../smart_authentication';
-import uuid from 'node-uuid';
 import $ from 'jquery';
+
+const uuidv4 = require('uuid/v4');
 
 var CHANGE_EVENT = 'change';
 var state = Immutable.fromJS({
@@ -50,7 +51,7 @@ function getJWT(hookUrl) {
       aud: hookUrl,
       exp: Math.round((Date.now() / 1000) + 3600),
       iat: Math.round((Date.now() / 1000)),
-      jti: uuid.v4()
+      jti: uuidv4()
     });
     var header = JSON.stringify({
       alg: 'ES256',
@@ -162,7 +163,6 @@ HookStore.dispatchToken = AppDispatcher.register(function(action) {
         resetHooks()
         HookStore.emitChange()
         break;
-
     case ActionTypes.NEW_HOOK:
       state = state.set('editing', true)
       state = state.set('current', null)

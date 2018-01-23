@@ -1,7 +1,6 @@
 import axios from 'axios'
 import ActionTypes from '../actions/ActionTypes'
 import moment from 'moment'
-import uuid from 'node-uuid'
 import { getIn, paramsToJson } from '../../../mock-cds-backend/utils.js';
 import CDS_SMART_OBJ from '../../smart_authentication';
 import $ from 'jquery';

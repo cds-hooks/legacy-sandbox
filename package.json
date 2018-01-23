@@ -15,8 +15,8 @@
     "jsrsasign": "^8.0.3",
     "less": "^2.5.3",
     "moment": "^2.10.6",
-    "node-uuid": "^1.4.3",
     "object-assign": "^2.0.0",
+    "query-string": "^5.0.1",
     "react": "^0.14.9",
     "react-codemirror": "^1.0.0",
     "react-day-picker": "~1.2.0",
@@ -24,7 +24,8 @@
     "react-markdown": "^1.0.3",
     "request-promise": "^0.4.3",
     "restify": "^4.3.0",
-    "striptags": "^2.0.3"
+    "striptags": "^2.0.3",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
