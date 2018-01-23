@@ -13,7 +13,16 @@ window.CDS_SMART_OBJ = window.CDS_SMART_OBJ || {};
         smart.server.hasOwnProperty('serviceUrl')) {
         CDS_SMART_OBJ.fhirBaseUrl = smart.server.serviceUrl;
       }
-      return ret.resolve(smart.tokenResponse);
+      const conformanceQuery = smart.api.conformance({});
+      $.when(conformanceQuery)
+        .done((conformanceResult) => {
+          if (conformanceResult.data.fhirVersion) {
+            CDS_SMART_OBJ.fhirVersion = conformanceResult.data.fhirVersion;
+          }
+          return ret.resolve(smart.tokenResponse);
+        }).fail(() => {
+          return ret.resolve(smart.tokenResponse);
+        });
     } else {
       CDS_SMART_OBJ.onError();
     }

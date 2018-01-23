@@ -4,6 +4,7 @@ import React from 'react';
 import RxActivity from './RxActivity';
 import PatientViewActivity from './PatientViewActivity';
 import CardRenderActivity from './CardRenderActivity';
+import CDS_SMART_OBJ from '../../smart_authentication';
 import HookEditor from './HookEditor';
 import AppStore from '../stores/AppStore'
 import DateStore from '../stores/DateStore'
@@ -166,6 +167,9 @@ const App = React.createClass({
             showFhirServerEntryError: false
           });
         }
+        if (response.data.fhirVersion) {
+          CDS_SMART_OBJ.fhirVersion = response.data.fhirVersion;
+        }
         AppDispatcher.dispatch({
           type: ActionTypes.CHANGE_FHIR_SERVER,
           url: this.state.fhirServer
@@ -228,6 +232,7 @@ const App = React.createClass({
     this.setState({
       fhirServer: 'https://api.hspconsortium.org/cdshooksdstu2/open'
     });
+    CDS_SMART_OBJ.fhirVersion = '1.0.2';
     AppDispatcher.dispatch({
       type: ActionTypes.CHANGE_FHIR_SERVER,
       url: 'https://api.hspconsortium.org/cdshooksdstu2/open'
