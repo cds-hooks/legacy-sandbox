@@ -11,15 +11,15 @@ const ProblemSelector = React.createClass({
             if (a.resource.code.text < b.resource.code.text) return -1;
             if (b.resource.code.text < a.resource.code.text) return 1;
             return 0;
-      })
-    return conditions.map(c => {
-        var code = c.resource.code.coding[0].code;
-        return (
-          <option
-            key={c.resource.code.coding[0].code}
-          value={c.resource.code.coding[0].code} >
+      });
+    return conditions.map((c, ind) => {
+      var code = c.resource.code.coding[0].code;
+      return (
+        <option
+          key={ind}
+          value={code} >
           {c.resource.code.text}</option>
-        )})
+      )})
   },
 
   pick: function(e) {

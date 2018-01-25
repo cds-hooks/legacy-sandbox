@@ -48,7 +48,28 @@ function _fetchData() {
           patient: state.getIn(['context', 'patient'])
         }
       }).then(c => {
-        state = state.set('conditions', c.data.entry);
+        // Filter conditions found so only unique and valid conditions are set on the state
+        if (c && c.data && c.data.entry) {
+          var data = c.data.entry;
+          var codeObjArray = [];
+          var filteredConditions = data.filter((item) => {
+            var resource = item.resource;
+            var hasAppropriateCode = resource && resource.code && resource.code.coding &&
+              resource.code.coding[0] && resource.code.coding[0].code;
+            if (hasAppropriateCode) {
+              var isDuplicate =  codeObjArray.indexOf(resource.code.coding[0].code);
+              if (isDuplicate < 0) {
+                codeObjArray.push(resource.code.coding[0].code);
+                return true;
+              }
+              return false;
+            }
+            return false;
+          });
+          state = state.set('conditions', filteredConditions);
+        } else {
+          state = state.set('conditions', []);
+        }
       });
       console.log("Got patient", b.data);
       return deferObj.resolve(state);
