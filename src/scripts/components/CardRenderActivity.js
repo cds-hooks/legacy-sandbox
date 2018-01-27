@@ -99,7 +99,8 @@ const CardRenderActivity = React.createClass({
     var indicators = {
       info: 0,
       warning: 1,
-      danger: 2
+      'hard-stop': 2,
+      error: 3
     };
 
     var card;
