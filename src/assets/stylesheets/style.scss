@@ -422,10 +422,16 @@ pre {
       color: $orange;
     }
   }
-  &.alert-danger {
+  &.alert-hard-stop {
     border-left-color: $red;
     .card-summary {
       color: $red;
+    }
+  }
+  &.alert-error {
+    border-left-color: $dark-grey;
+    .card-summary {
+      color: $dark-grey;
     }
   }
   &:hover {
