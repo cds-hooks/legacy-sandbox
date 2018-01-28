@@ -275,11 +275,12 @@ function callHooks(localState) {
       aud: hookUrl,
       exp: Math.round((Date.now() / 1000) + 3600),
       iat: Math.round((Date.now() / 1000)),
-      jti: uuidv4()
+      jti: uuidv4(),
     });
     var header = JSON.stringify({
       alg: 'ES256',
-      typ: 'JWT'
+      typ: 'JWT',
+      kid: '9b4f5be8-055a-408d-9e1a-1af98dcf2509',
     });
     return JWT.jws.JWS.sign(null, header, payload, data);
   }
