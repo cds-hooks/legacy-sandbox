@@ -38,7 +38,7 @@ var _db = {};
 // recommending can, alternatively, return a single "decision" indicating a user-approved choice.
 function view(reason, sid, req, res, next){
   var inData = _db[sid].inData;
-  var med = inData.context[0];
+  var med = inData.context.medications[0];
   var patient = inData.prefetch.patient.resource;
 
   var context = {
@@ -58,7 +58,7 @@ function view(reason, sid, req, res, next){
 }
 
 function assessJNC(inData, response) {
-  var med = inData.context[0];
+  var med = inData.context.medications[0];
   var hookInstance = inData.hookInstance;
   var redirect = inData.redirect;
   if (!med.reasonCodeableConcept) return;
@@ -143,7 +143,7 @@ function assessJNC(inData, response) {
 
 
 function assessHarvoni(inData, cards) {
-  var med = inData.context[0];
+  var med = inData.context.medications[0];
   var hookInstance = inData.hookInstance;
   var redirect = inData.redirect;
   if (! med.medicationCodeableConcept) return;
@@ -183,7 +183,7 @@ function assessHarvoni(inData, cards) {
 }
 
 function assessGenetics(inData, cards) {
-  var med = inData.context[0];
+  var med = inData.context.medications[0];
   if (! med.medicationCodeableConcept) return;
   var drugName = med.medicationCodeableConcept.text;
   console.log("Check allopurinol");
@@ -223,7 +223,7 @@ function assessGenetics(inData, cards) {
 }
 
 function recommend(data) {
-  var lowerDose = data.context[0]
+  var lowerDose = data.context.medications[0];
   var ret = {
     cards: [],
     decisions: []
