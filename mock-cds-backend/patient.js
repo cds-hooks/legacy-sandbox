@@ -7,7 +7,7 @@ var metadata = require('./utils').metadata
 
 module.exports = {
   service: function(indata, cb) {
-    cb(null, recommend(indata));
+    cb(null, recommend(indata.body));
   },
   view: null,
   description: {

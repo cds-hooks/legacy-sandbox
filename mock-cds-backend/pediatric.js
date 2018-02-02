@@ -23,7 +23,7 @@ var baseUrl;
 module.exports ={
   service: function(indata, cb) {
     protocol = indata.isSecure() ? 'https://' : 'http://';
-    baseUrl = protocol + request.header('Host');
+    baseUrl = protocol + indata.header('Host');
     cb(null, recommend(indata.body));
   }, view:  view,
   description: {
