@@ -16,10 +16,15 @@ function fillTemplate(template, context) {
   return template;
 }
 
+var protocol;
+var baseUrl;
+
 
 module.exports ={
   service: function(indata, cb) {
-    cb(null, recommend(indata));
+    protocol = indata.isSecure() ? 'https://' : 'http://';
+    baseUrl = protocol + request.header('Host');
+    cb(null, recommend(indata.body));
   }, view:  view,
   description: {
     hook: "medication-prescribe",
@@ -44,7 +49,8 @@ function view(reason, sid, req, res, next){
   var context = {
     "Patient.name": patient.name[0].given.join(" ") + " " + patient.name[0].family.join(" "),
     "Patient.birthDate": patient.birthDate,
-    "redirect": _db[sid].redirect
+    "redirect": _db[sid].redirect,
+    "uuid": sid
   }
 
   _db[sid]["started"+reason] = true
@@ -79,7 +85,7 @@ function assessJNC(inData, response) {
       indicator: "info",
       links: [{
         label: "Tailor therapy with JNC Pro",
-        url: context.url + "/service/pediatric-dose-check/jnc8/" + hookInstance
+        url: baseUrl + "/service/pediatric-dose-check/jnc8/" + hookInstance
       }]
     })
   } else {
@@ -132,7 +138,7 @@ function assessJNC(inData, response) {
         indicator: "info",
         links: [{
           label: "Tailor therapy",
-          url: context.url + "/service/pediatric-dose-check/jnc8/" + hookInstance
+          url: baseUrl + "/service/pediatric-dose-check/jnc8/" + hookInstance
         }]
       });
     }
@@ -164,7 +170,7 @@ function assessHarvoni(inData, cards) {
       indicator: "info",
       links: [{
         label: "View status",
-        url: context.url + "/service/pediatric-dose-check/harvoni/" + hookInstance
+        url: baseUrl + "/service/pediatric-dose-check/harvoni/" + hookInstance
       }]
     })
   } else {
@@ -176,7 +182,7 @@ function assessHarvoni(inData, cards) {
       indicator: "warning",
       links: [{
         label: "Begin prior auth process",
-        url: context.url + "/service/pediatric-dose-check/harvoni/" + hookInstance
+        url: baseUrl + "/service/pediatric-dose-check/harvoni/" + hookInstance
       }]
     });
   }

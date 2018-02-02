@@ -46,7 +46,7 @@ Object.keys(services).forEach(function(name){
   });
   server.post("/cds-services/"+name, function(req, res, next){
     console.log("Do CDS", name)
-    service.service(req.body, function(err, cdsResult){
+    service.service(req, function(err, cdsResult){
       console.log("service got", err, cdsResult)
       res.json(cdsResult);
       if (err){
