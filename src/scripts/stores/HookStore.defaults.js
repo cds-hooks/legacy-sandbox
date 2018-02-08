@@ -19,5 +19,16 @@ export default {
     prefetch: {
       "patientToGreet": "Patient/{{Patient.id}}"
     }
+  },
+  [url + "pediatric-dose-check"]: {
+    enabled: true,
+    id: url + "pediatric-dose-check",
+    url: url + "pediatric-dose-check",
+    name: "Pediatric Dose Check", // Remove on complete transition to CDS Hooks 1.0 Spec
+    title: "Pediatric Dose Check",
+    hook: "medication-prescribe",
+    prefetch: {
+      "patient": "Patient/{{Patient.id}}"
+    }
   }
 }
