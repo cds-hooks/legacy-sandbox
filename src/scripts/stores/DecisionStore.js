@@ -33,11 +33,13 @@ var state = Immutable.fromJS({
 
 function getFhirContext() {
   var c = FhirServerStore.getState().get('context');
+  c = c.set('User.id', c.get('user'));
   return c.set('Patient.id', c.get('patient')).toJS()
 }
 
 function fillTemplate(template, context) {
   var flat = template.replace(/{{\s*Patient\.id\s*}}/g, context["Patient.id"]).toString();
+  flat = flat.replace(/{{\s*User\.id\s*}}/g, context["User.id"]).toString();
   if (flat.split('?').length > 1) {
     var splitUrl = flat.split('?');
     var queryParams = queryString.parse(splitUrl[1]);
@@ -62,6 +64,7 @@ function _hooksChanged() {
   }
   var hooks = newHooks.filter((v,k) => v.get('enabled'));
   var patient = FhirServerStore.getState().getIn(['context', 'patient']);
+  var user = FhirServerStore.getState().getIn(['context', 'user']);
 
   var samePatient = patient === state.get('patient')
   var sameHooks = hooks.equals(state.get('hooks'))

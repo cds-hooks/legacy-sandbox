@@ -31,11 +31,17 @@ CDS_SMART_OBJ.fetchContext().then(
     ReactDOM.render(<App/>, document.getElementById('react-wrapper'));
   }, () => {
     var qs = querystring.parse(window.location.search.slice(1));
+    var fhirBaseUrl = qs.fhirServiceUrl || runtime.FHIR_URL;
 
     function renderApp() {
+      var user;
+      if (fhirBaseUrl === 'https://api.hspconsortium.org/cdshooksdstu2/open') {
+        user = 'Practitioner/COREPRACTITIONER1';
+      }
       var fhirContext = {
         patient: qs.patientId || "SMART-1288992",
-        baseUrl: qs.fhirServiceUrl || runtime.FHIR_URL
+        baseUrl: fhirBaseUrl,
+        user: user
       }
       FhirServerStore.setContext(fhirContext, true);
       CDS_SMART_OBJ.processedContext = true;
@@ -44,7 +50,7 @@ CDS_SMART_OBJ.fetchContext().then(
 
     axios({
       method: 'get',
-      url: `${qs.fhirServiceUrl || runtime.FHIR_URL}/metadata`,
+      url: `${fhirBaseUrl}/metadata`,
       headers: {'Accept': 'application/json+fhir'}
     }).then((result) => {
       if (result.data && result.data.fhirVersion) {

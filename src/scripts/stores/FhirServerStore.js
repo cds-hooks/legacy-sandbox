@@ -31,6 +31,27 @@ var fhirClient = function(config) {
 
 var _client;
 
+function setUser(client) {
+  var trueFhirObj;
+  if (client) {
+    trueFhirObj = client;
+  } else {
+    trueFhirObj = (CDS_SMART_OBJ.hasOwnProperty('smartObj')) ? CDS_SMART_OBJ.smartObj.api : _client;
+  }
+  trueFhirObj.read({
+    type: 'Practitioner',
+    id: 'COREPRACTITIONER1'
+  }).then(result => {
+    if (result.data && result.data.resourceType === 'Practitioner') {
+      state = state.setIn(['context', 'user'], 'Practitioner/COREPRACTITIONER1');
+    } else {
+      state = state.setIn(['context', 'user'], 'Practitioner/example');
+    }
+  }).catch(() => {
+    state = state.setIn(['context', 'user'], 'Practitioner/example');
+  });
+}
+
 function _fetchData() {
   console.log("Will get stat efor ",  state.getIn(['context', 'patient']))
   var trueFhirObj = (CDS_SMART_OBJ.hasOwnProperty('smartObj')) ? CDS_SMART_OBJ.smartObj.api : _client;
@@ -74,6 +95,9 @@ function _fetchData() {
       console.log("Got patient", b.data);
       return deferObj.resolve(state);
     });
+    if (!state.getIn(['context', 'user'])) {
+      setUser();
+    }
   }
 
   function fhirPromise() {
@@ -172,6 +196,7 @@ var FhirServiceStore = assign({}, EventEmitter.prototype, {
     if (!CDS_SMART_OBJ.hasOwnProperty('smartObj')) {
       state = state.set("context", state.get("context").merge({ baseUrl: serverUrl }));
       _client = fhirClient(state.get('context').toJS());
+      setUser(_client);
       this.emitChange();
     }
   },
