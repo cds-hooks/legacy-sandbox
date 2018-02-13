@@ -25,6 +25,7 @@
     "request-promise": "^0.4.3",
     "restify": "^4.3.0",
     "striptags": "^2.0.3",
+    "url-parse": "^1.2.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {

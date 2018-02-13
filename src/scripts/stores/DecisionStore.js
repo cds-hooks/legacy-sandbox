@@ -28,7 +28,8 @@ var state = Immutable.fromJS({
   calling: false,
   cards: [],
   services: Immutable.Map(),
-  cardLinkInvoked: false
+  cardLinkInvoked: false,
+  invokedServiceHistory: {}
 })
 
 function getFhirContext() {
@@ -50,9 +51,9 @@ function fillTemplate(template, context) {
   return flat;
 }
 
-function _externalAppReturned() {
+function _externalAppReturned(hookInstance) {
   console.log("Handling external return by re-running hooks")
-  callHooks(state)
+  callHooks(state, hookInstance)
 }
 function _hooksChanged() {
   var context = getFhirContext()
@@ -138,12 +139,12 @@ if (!_base.match(/.*\//)) {
   _base += "/";
 }
 
-function hookBody(h, fhir, prefetch) {
+function hookBody(h, fhir, prefetch, reinvokedHookInstance) {
   var ids = idService.createIds();
-  var serviceId = h.get('id')
+  var serviceId = h.get('url')
   var ret = {
     hook: h.get('hook'),
-    hookInstance: uuidv4(),
+    hookInstance: reinvokedHookInstance || uuidv4(),
     fhirServer: FhirServerStore.getState().getIn(['context', 'baseUrl']),
     redirect: _base + "service-done.html",
     user: FhirServerStore.getState().getIn(['context', 'user']) || "Practitioner/example",
@@ -168,6 +169,8 @@ function hookBody(h, fhir, prefetch) {
       ret.context[key] = state.get('fhir')[key];
     });
   }
+
+  state = state.setIn(['invokedServiceHistory', ret.hookInstance], serviceId);
 
   var serviceRequest = Immutable.fromJS({
     request: Immutable.fromJS(ret),
@@ -243,7 +246,7 @@ function addCardsFrom(callCount, hookUrl, result) {
 }
 
 var callCount = 0;
-function callHooks(localState) {
+function callHooks(localState, invokedHookInstance) {
   var myCallCount = callCount++;
   state = state.set('cards', Immutable.fromJS([]));
   state = state.set('callCount', myCallCount)
@@ -251,7 +254,16 @@ function callHooks(localState) {
 
   var applicableServices = localState
   .get('hooks')
-  .filter((h, hookUrl) => h.get('hook') === localState.get('hook'))
+  .filter((h, hookUrl) => h.get('hook') === localState.get('hook'));
+
+  if (invokedHookInstance) {
+    var invokedRequestUrl = state.get('invokedServiceHistory').get(invokedHookInstance);
+    if (invokedRequestUrl) {
+      applicableServices = applicableServices.filter((h) => {
+        return h.get('url') === invokedRequestUrl;
+      });
+    }
+  }
 
   if (applicableServices.count() == 0) {
     state = state.set('calling', false)
@@ -306,7 +318,7 @@ function callHooks(localState) {
               method: 'post',
               data: hookBody(h,
                 localState.get('fhir'),
-                prefetch),
+                prefetch, invokedHookInstance),
               headers: {
                 'Authorization': 'Bearer ' + val,
                 'Content-Type': 'application/json'
@@ -434,7 +446,7 @@ DecisionStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
       case ActionTypes.EXTERNAL_APP_RETURNED:
-          _externalAppReturned()
+          _externalAppReturned(action.hookInstance);
           break
 
       case ActionTypes.TAKE_SUGGESTION:

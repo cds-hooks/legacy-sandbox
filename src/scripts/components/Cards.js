@@ -8,13 +8,19 @@ import striptags from 'striptags'
 import CDS_SMART_OBJ from '../../smart_authentication';
 import DecisionStore from '../stores/DecisionStore';
 
+const URL = require('url-parse');
+
 window.addEventListener("message", (e) => {
-  if (CDS_SMART_OBJ.processedContext && DecisionStore.getState().cardLinkInvoked) {
+  var url = window.location;
+  var redirectUrl = new URL(e.data);
+  var hookInstance = redirectUrl.hash.slice(1, redirectUrl.hash.length);
+  if (CDS_SMART_OBJ.processedContext && DecisionStore.getState().get('cardLinkInvoked')) {
     AppDispatcher.dispatch({
-      type: ActionTypes.EXTERNAL_APP_RETURNED
+      type: ActionTypes.EXTERNAL_APP_RETURNED,
+      hookInstance: hookInstance
     });
   }
-  if (e.target.document.URL.indexOf(e.origin) === -1) {
+  if (e.origin !== `${url.protocol}//${url.host}` || redirectUrl.pathname === '/service-done.html') {
     e.source.close();
   }
 });
@@ -43,14 +49,14 @@ const Cards = React.createClass({
       this.props.toggleLaunchErrorModal();
       return;
     }
+    AppDispatcher.dispatch({
+      type: ActionTypes.INVOKE_CARD_LINK
+    });
     window.open(link.url, '_blank');
   },
 
   toggleClickedLinks(e) {
     e.preventDefault();
-    AppDispatcher.dispatch({
-      type: ActionTypes.INVOKE_CARD_LINK
-    });
   },
 
   retrieveLaunchContext(link) {
