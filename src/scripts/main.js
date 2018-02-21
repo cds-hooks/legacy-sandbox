@@ -14,6 +14,7 @@ import querystring from 'querystring';
 import FhirServerStore from './stores/FhirServerStore';
 import axios from 'axios';
 import $ from 'jquery';
+import HookStore from './stores/HookStore';
 
 
 CDS_SMART_OBJ.fetchContext().then(
@@ -27,8 +28,19 @@ CDS_SMART_OBJ.fetchContext().then(
       fhirContext.user = CDS_SMART_OBJ.smartObj.userId;
       FhirServerStore.setContext(fhirContext);
     }
-    CDS_SMART_OBJ.processedContext = true;
-    ReactDOM.render(<App/>, document.getElementById('react-wrapper'));
+
+    $.when((() => {
+      if (CDS_SMART_OBJ.accessToken && CDS_SMART_OBJ.accessToken.serviceDiscoveryURL) {
+        return HookStore.checkAndStoreValidService(
+          CDS_SMART_OBJ.accessToken.serviceDiscoveryURL,
+          $.Deferred()
+        );
+      }
+    })())
+    .then(() => {
+      CDS_SMART_OBJ.processedContext = true;
+      ReactDOM.render(<App/>, document.getElementById('react-wrapper'));
+    });
   }, () => {
     var qs = querystring.parse(window.location.search.slice(1));
     var fhirBaseUrl = qs.fhirServiceUrl || runtime.FHIR_URL;
