@@ -200,3 +200,231 @@ body {
   .patient-view__half-view___16uqP {
     width: 100%;
     display: inline-block; } }
+.Field__field___5kNES,
+.Field__fieldset___AQiT3 {
+  border: 0;
+  margin-bottom: 1.428em;
+  padding: 0; }
+
+@media screen and (min-width: 544px) {
+  .Field__field-inline___2Bdi_,
+  .Field__fieldset-inline___2TtXf {
+    display: inline-block;
+    margin-right: 0.7143em;
+    vertical-align: top; } }
+
+.Field__field-required___XZh70 > .Field__label___2jQh_:first-child::before,
+.Field__fieldset-required___j9-RB > .Field__legend___3ngON:first-child::before {
+  color: #e50000;
+  content: '*';
+  display: inline-block;
+  padding-right: 0.357em; }
+
+.Field__label___2jQh_ {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.357em; }
+
+.Field__legend___3ngON {
+  border: 0;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.357em;
+  max-width: 100%;
+  padding: 0;
+  width: auto; }
+
+.Field__help-text___1CUVN {
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.357em;
+  outline: 0; }
+
+.Field__error___2aOoU {
+  color: #e50000;
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.357em;
+  outline: 0; }
+
+.Field__fieldset-children___2qPkY {
+  margin-top: 0.714em; }
+.Select__select___2Ko_o {
+  background-color: #fff;
+  border: #dedfe0 solid 1px;
+  border-radius: 0.25em;
+  font-size: 1em;
+  height: 1.857em;
+  padding: 0.178em;
+  width: 100%; }
+  .Select__select___2Ko_o[required] {
+    -webkit-box-shadow: unset;
+            box-shadow: unset;
+    outline: none; }
+/* stylelint-disable scss/at-mixin-pattern  */
+/* stylelint-enable scss/at-mixin-pattern  */
+/* stylelint-disable scss/at-mixin-pattern  */
+/* stylelint-enable scss/at-mixin-pattern  */
+.Card__card___1DhLP {
+  background-color: #fff;
+  background-color: var(--terra-card-background-color, #fff);
+  border: 1px solid #c8cacb;
+  border: var(--terra-card-border, 1px solid #c8cacb);
+  border-radius: 3px;
+  border-radius: var(--terra-card-border-radius, 3px);
+  -webkit-box-shadow: none;
+  -webkit-box-shadow: var(--terra-card-box-shadow, none);
+          box-shadow: none;
+          box-shadow: var(--terra-card-box-shadow, none);
+  color: inherit;
+  color: var(--terra-card-color, inherit);
+  overflow: hidden; }
+ {
+  /* stylelint-disable selector-class-pattern  */ }
+  .CardBody__vertical-padding___3AB2y {
+    padding-bottom: 10px;
+    padding-bottom: var(--terra-card-padding-bottom, 10px);
+    padding-top: 10px;
+    padding-top: var(--terra-card-padding-top, 10px); }
+  .CardBody__horizontal-padding___sp0cw {
+    padding-left: 10px;
+    padding-left: var(--terra-card-padding-left, 10px);
+    padding-right: 10px;
+    padding-right: var(--terra-card-padding-right, 10px); }
+ {
+  /**
+   * Used to hide the content visually, yet provide the content to screen readers,
+   * More info: http://a11yproject.com/posts/how-to-hide-content/
+   */ }
+  .Heading__heading___3r0rd {
+    margin: 0; }
+  .Heading__italic___6CnoD {
+    font-style: italic; }
+  .Heading__level-1___3yl_q {
+    font-size: 2.286rem; }
+  .Heading__level-2___3OvDc {
+    font-size: 1.714rem; }
+  .Heading__level-3___15Rdj {
+    font-size: 1.429rem; }
+  .Heading__level-4___1az2c {
+    font-size: 1.286rem; }
+  .Heading__level-5___3sImY {
+    font-size: 1.143rem; }
+  .Heading__level-6___eRKBM {
+    font-size: 1rem; }
+  .Heading__size-huge___Vxr3j {
+    font-size: 2.286rem; }
+  .Heading__size-large___1Uuc4 {
+    font-size: 1.714rem; }
+  .Heading__size-medium___1dbFD {
+    font-size: 1.429rem; }
+  .Heading__size-small___1yj4q {
+    font-size: 1.286rem; }
+  .Heading__size-tiny___2acEu {
+    font-size: 1.143rem; }
+  .Heading__size-mini___2yfeZ {
+    font-size: 1rem; }
+  .Heading__weight-200___2X-OR {
+    font-weight: 200; }
+  .Heading__weight-400___J2HpJ {
+    font-weight: 400; }
+  .Heading__weight-700___3S71I {
+    font-weight: 700; }
+  .Heading__visually-hidden___2SNMj {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px; }
+.Toggle__toggle___2YkvY {
+  padding-top: 0.5rem; }
+
+.Toggle__toggle___2YkvY[aria-hidden='true'] {
+  opacity: 0;
+  -webkit-transition: visibility 0s linear 0.5s,opacity 0.5s linear;
+  transition: visibility 0s linear 0.5s,opacity 0.5s linear;
+  visibility: hidden; }
+
+.Toggle__toggle___2YkvY[aria-hidden='false'] {
+  opacity: 1;
+  -webkit-transition-delay: 0s;
+          transition-delay: 0s;
+  visibility: visible; }
+.exchange-panel__fhir-view___1qIsF {
+  position: static;
+  background: #0D0630; }
+
+.exchange-panel__header-toggle___17oKY {
+  padding-left: 10px;
+  cursor: pointer; }
+
+.exchange-panel__panel-height___1RM-T {
+  padding: 0.2% 2%;
+  overflow-y: auto; }
+
+.exchange-panel__panel-text___1iX0C pre {
+  color: #fff;
+  font-size: 100%;
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  word-wrap: break-word; }
+.context-view__container___2lbQU {
+  height: inherit;
+  width: 50%;
+  padding: 30px;
+  border-left: 1px solid #0D0630;
+  display: inline-block;
+  position: absolute;
+  right: -50%;
+  -webkit-transition: right .3s ease-in-out;
+  transition: right .3s ease-in-out; }
+
+.context-view__context-open___1L7Vw {
+  right: 0;
+  position: relative; }
+
+.context-view__context-toggle___3AqLU {
+  position: absolute;
+  top: 75px;
+  left: -75px;
+  z-index: 1;
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  cursor: pointer;
+  font-size: 1.1em;
+  border: 1px solid #0D0630; }
+
+.context-view__title___vPNfv {
+  padding: 0 0 10px;
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  letter-spacing: -0.025em;
+  color: #384E77;
+  /* $color-primary */
+  border-bottom: 2px solid #eee; }
+
+@media (max-width: 975px) {
+  .context-view__container___2lbQU {
+    width: 100%;
+    right: 0;
+    padding: 10px;
+    display: inline-block;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #0D0630;
+    position: relative; }
+  .context-view__container___2lbQU.context-view__context-open___1L7Vw .context-view__wrap-context___3WPUW {
+    display: block; }
+  .context-view__container___2lbQU .context-view__wrap-context___3WPUW {
+    display: none; }
+  .context-view__context-toggle___3AqLU {
+    top: -24px;
+    width: 100%;
+    left: 0;
+    display: block;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none; } }
