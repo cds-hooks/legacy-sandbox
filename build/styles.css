@@ -1,0 +1,202 @@
+/* stylelint-disable scss/at-mixin-pattern  */
+/* stylelint-enable scss/at-mixin-pattern  */
+/* stylelint-disable scss/at-mixin-pattern  */
+/* stylelint-enable scss/at-mixin-pattern  */
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--terra-base-font-family, "Helvetica Neue", Helvetica, Arial, sans-serif);
+  font-size: 87.5%;
+  font-size: var(--terra-base-font-size, 87.5%);
+  height: 100%;
+  height: var(--terra-base-html-height, 100%);
+  margin: 0;
+  margin: var(--terra-base-html-margin, 0);
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%; }
+
+body {
+  background-color: #fff;
+  background-color: var(--terra-base-background-color, #fff);
+  color: #1c1f21;
+  color: var(--terra-base-color, #1c1f21);
+  font-size: 1rem;
+  height: 100%;
+  height: var(--terra-base-body-height, 100%);
+  line-height: 1.42857;
+  line-height: var(--terra-base-line-height, 1.42857);
+  margin: 0;
+  margin: var(--terra-base-body-margin, 0); }
+  @media print {
+    body {
+      background-color: transparent !important;
+      color: #000 !important; } }
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit; }
+/**
+ * IE/Edge need both width and height defined to properly size SVG icons
+ */
+ {
+  /**
+   * The following selectors match all SVG elements, (path, cirlec, line, rect, etc), within inline SVG
+   * which do not have a predefined fill color.
+   */ }
+  .Icon__icon___3Gd9t {
+    display: inline-block;
+    vertical-align: -0.15em; }
+  .Icon__icon___3Gd9t *:not([fill]) {
+    fill: currentColor; }
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg); } }
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg); } }
+  .Icon__icon___3Gd9t.Icon__is-spin___2iNvt {
+    -webkit-animation: spin 2s infinite linear;
+            animation: spin 2s infinite linear; }
+  [dir='rtl'] .Icon__icon___3Gd9t.Icon__is-bidi___OIV0n {
+    -webkit-transform: scaleX(-1);
+            transform: scaleX(-1); }
+.Overlay__overlay-container___1ZTwW {
+  outline: none;
+  position: relative; }
+
+.Overlay__overlay___2It-7 {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  outline: none;
+  overflow: hidden;
+  z-index: 100; }
+
+.Overlay__clear___2fskw {
+  background: rgba(255, 255, 255, 0.001); }
+
+.Overlay__dark___3g9tR {
+  background: rgba(28, 31, 33, 0.8);
+  background: var(--terra-overlay-dark-background-color, rgba(28, 31, 33, 0.8));
+  background-image: none;
+  background-image: var(--terra-overlay-dark-background-image, none); }
+  .Overlay__dark___3g9tR .Overlay__content___34o4x {
+    color: #fff;
+    color: var(--terra-overlay-dark-content-color, #fff); }
+
+.Overlay__light___2Aox1 {
+  background: rgba(245, 245, 245, 0.7);
+  background: var(--terra-overlay-light-background-color, rgba(245, 245, 245, 0.7));
+  background-image: none;
+  background-image: var(--terra-overlay-light-background-image, none); }
+  .Overlay__light___2Aox1 .Overlay__content___34o4x {
+    color: #1c1f21;
+    color: var(--terra-overlay-light-content-color, #1c1f21); }
+
+.Overlay__fullscreen___2hdIs {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0; }
+
+.Overlay__container___39gGc {
+  height: 100%;
+  position: absolute;
+  width: 100%; }
+
+.Overlay__scrollable___3UqBp {
+  overflow-y: scroll; }
+
+.Overlay__content___34o4x {
+  color: #1c1f21;
+  color: var(--terra-overlay-content-color, #1c1f21);
+  font-size: 1rem;
+  max-height: 100%;
+  padding-bottom: 1rem;
+  padding-bottom: var(--terra-overlay-content-padding-bottom, 1rem);
+  padding-left: 1rem;
+  padding-left: var(--terra-overlay-content-padding-left, 1rem);
+  padding-right: 1rem;
+  padding-right: var(--terra-overlay-content-padding-right, 1rem);
+  padding-top: 1rem;
+  padding-top: var(--terra-overlay-content-padding-top, 1rem); }
+
+.Overlay__icon___wDAjv {
+  display: block !important;
+  margin: auto; }
+
+.Overlay__message___fk_-X {
+  padding: 5px; }
+.main-view__container___Ao5W9 {
+  min-height: 100vh;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
+  position: relative; }
+
+@media (max-width: 975px) {
+  .main-view__container___Ao5W9 {
+    display: inline-block;
+    display: block;
+    height: auto; } }
+.patient-view__patient-view___1GOM4 {
+  height: auto;
+  display: inline-block;
+  padding: 30px;
+  margin: 0 0 20px;
+  vertical-align: top;
+  width: 100%; }
+
+.patient-view__half-view___16uqP {
+  width: 50%; }
+
+.patient-view__view-title___-ZYRV {
+  padding: 0 0 10px;
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  letter-spacing: -0.025em;
+  color: #384E77;
+  /* $color-primary */
+  border-bottom: 2px solid #eee; }
+
+.patient-view__patient-data-text___16rqB {
+  font-size: 1em;
+  margin: 0 0 20px;
+  color: #888; }
+
+@media (max-width: 975px) {
+  .patient-view__patient-view___1GOM4 {
+    padding: 10px;
+    display: inline-block;
+    position: relative; }
+  .patient-view__half-view___16uqP {
+    width: 100%;
+    display: inline-block; } }
