@@ -5,6 +5,7 @@ addLocaleData(localeData);
 
 const messages = {
   "Terra.ajax.error": "Inhalt konnte nicht geladen werden.",
+  "Terra.form.field.optional": "(Optional)",
   "Terra.Overlay.loading": "Ladevorgang..."
 };
 const areTranslationsLoaded = true;

@@ -6,8 +6,6 @@ const initialState = {
   defaultFhirServer: 'https://api.hspconsortium.org/cdshooksdstu2/open',
   fhirVersion: '1.0.2',
   isDefaultFhirServer: true,
-  // Used for reference when trying to validate switching to this FHIR server
-  testFhirServer: '',
   accessToken: null,
 };
 
@@ -27,6 +25,11 @@ const fhirServerReducers = (state = initialState, action) => {
       case types.SMART_AUTH_SUCCESS: {
         return Object.assign({}, state, {
           accessToken: action.authResponse.tokenResponse,
+        });
+      }
+      case types.SET_CURRENT_FHIR_SERVER: {
+        return Object.assign({}, state, {
+          currentFhirServer: action.fhirServer,
         });
       }
       default:

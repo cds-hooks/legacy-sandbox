@@ -56,7 +56,7 @@ describe('Service Exchange', () => {
       fhirServer: mockFhirServer,
       user: 'Practitioner/example',
       patient: mockPatient,
-      context: {}
+      context: { patientId: mockPatient }
     };
 
     defaultStore = {

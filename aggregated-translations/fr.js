@@ -5,6 +5,7 @@ addLocaleData(localeData);
 
 const messages = {
   "Terra.ajax.error": "Échec du chargement du contenu.",
+  "Terra.form.field.optional": "(facultatif)",
   "Terra.Overlay.loading": "Chargement..."
 };
 const areTranslationsLoaded = true;

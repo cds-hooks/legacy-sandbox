@@ -101,6 +101,7 @@ function callServices(url, context) {
 
   const patient = state.patientState.currentPatient.id;
   const activityContext = context || {};
+  activityContext.patientId = patient;
 
   const hookInstance = uuidv4();
   const request = {
