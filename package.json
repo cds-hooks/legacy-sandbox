@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --config webpack.config.dev.js --inline --content-base ./build",
     "build": "webpack --config webpack.config.dev.js --progress --colors --display-error-details",
     "lint": "./node_modules/.bin/eslint ./src --fix",
-    "test": "jest --coverage"
+    "test": "jest --coverage || true"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -35,7 +35,8 @@
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
-    "terra-base": "^3.1.0",
+    "terra-application-header-layout": "^2.1.0",
+    "terra-base": "^3.2.0",
     "terra-button": "^2.1.0",
     "terra-card": "^2.1.0",
     "terra-dialog": "^1.0.0",
@@ -43,6 +44,8 @@
     "terra-form-field": "^2.1.0",
     "terra-form-input": "^1.0.0",
     "terra-heading": "^2.1.0",
+    "terra-icon": "^2.2.0",
+    "terra-menu": "^2.3.0",
     "terra-modal": "^2.1.0",
     "terra-overlay": "^2.1.0",
     "terra-spacer": "^2.1.0",
@@ -91,6 +94,7 @@
       "./tests/jest-setup.js"
     ],
     "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|svg)$": "<rootDir>/src/assets/__mocks__/fileMock.js",
       "\\.(css|scss)$": "identity-obj-proxy"
     },
     "coveragePathIgnorePatterns": [

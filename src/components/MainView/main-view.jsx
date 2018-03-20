@@ -9,6 +9,7 @@ import retrieveDiscoveryServices from '../../retrieve-data-helpers/discovery-ser
 import store from '../../store/store';
 
 import styles from './main-view.css';
+import Header from '../Header/header';
 import PatientView from '../PatientView/patient-view';
 import ContextView from '../ContextView/context-view';
 import FhirServerEntry from '../FhirServerEntry/fhir-server-entry';
@@ -81,13 +82,15 @@ export class MainView extends Component {
       {hookView}
       <ContextView />
     </div>;
+
     return (
       <div>
         <LoadingOverlay isOpen={this.props.isLoadingData} isAnimated />
+        <div className={styles.pin}><Header /></div>
         {this.state.fhirServerPrompt ? <FhirServerEntry isOpen={this.state.fhirServerPrompt} 
-                         isEntryRequired={true}
-                         closePrompt={this.closeFhirServerPrompt}
-                         resolve={this.state.fhirServerPromptHold} /> : null}
+                        isEntryRequired={true}
+                        closePrompt={this.closeFhirServerPrompt}
+                        resolve={this.state.fhirServerPromptHold} /> : null}
         {this.state.patientPrompt ? <PatientEntry isOpen={this.state.patientPrompt} 
                       isEntryRequired={true}
                       closePrompt={this.closePatientPrompt}
