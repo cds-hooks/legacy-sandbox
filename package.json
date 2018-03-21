@@ -33,6 +33,7 @@
     "query-string": "^5.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-markdown": "^3.3.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "terra-application-header-layout": "^2.1.0",
@@ -88,7 +89,8 @@
     "style-loader": "^0.19.1",
     "terra-i18n-plugin": "^2.0.0",
     "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.0"
+    "webpack-dev-server": "^2.11.0",
+    "webpack-merge": "^4.1.2"
   },
   "jest": {
     "setupFiles": [

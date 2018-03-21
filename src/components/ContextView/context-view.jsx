@@ -11,6 +11,7 @@ import styles from './context-view.css';
 
 import { selectService } from '../../actions/service-exchange-actions';
 import { setContextVisibility } from '../../actions/ui-actions';
+import { getServicesByHook } from '../../reducers/helpers/services-filter';
 
 export class ContextView extends Component {
 

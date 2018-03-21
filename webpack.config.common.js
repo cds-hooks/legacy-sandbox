@@ -1,11 +1,34 @@
-const merge = require('webpack-merge');
-const common = require('./webpack.config.common.js');
+const webpack = require('webpack');
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const I18nAggregatorPlugin = require('terra-i18n-plugin');
+const i18nSupportedLocales = require('terra-i18n/lib/i18nSupportedLocales');
+const Autoprefixer = require('autoprefixer');
+const CustomProperties = require('postcss-custom-properties');
 
-module.exports = merge(common, {
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './build',
+const BUILD_DIR = path.resolve(__dirname, './build');
+const SRC_DIR = path.resolve(__dirname, './src');
+
+const globalCss = [
+  /node_modules\/terra-icon\/lib\/Icon/
+];
+
+const cssLoaderNoModules = {
+  loader: 'css-loader',
+  options: {
+    sourceMap: true,
+    importLoaders: 2,
+    localIdentName: '[name]__[local]___[hash:base64:5]',
   },
+};
+
+const cssLoaderWithModules = Object.assign({}, cssLoaderNoModules, { 
+  options: { 
+    modules: true, 
+    sourceMap: true,
+    importLoaders: 2,
+    localIdentName: '[name]__[local]___[hash:base64:5]',
+  } 
 });
 
 const postCssLoader = {
@@ -46,7 +69,6 @@ const config = {
     extensions: ['.js', '.jsx', '.json', '*'],
     modules: [path.resolve(__dirname, 'aggregated-translations'), 'node_modules'],
   },
-  devtool: 'eval-source-map',
   module: {
     rules: [
       {
@@ -72,17 +94,6 @@ const config = {
             sassLoader
           ],
         }),
-      },
-      {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]'
-            }
-          }
-        ] 
       },
       {
         test: /\.jsx?/,
