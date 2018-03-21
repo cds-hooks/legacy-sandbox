@@ -2512,6 +2512,74 @@ body {
 @media (max-width: 600px) {
   .header__logo-title___3XJ69 {
     display: none; } }
+/* stylelint-disable scss/at-mixin-pattern  */
+/* stylelint-enable scss/at-mixin-pattern  */
+/* stylelint-disable scss/at-mixin-pattern  */
+/* stylelint-enable scss/at-mixin-pattern  */
+.Card__card___1DhLP {
+  background-color: #fff;
+  background-color: var(--terra-card-background-color, #fff);
+  border: 1px solid #c8cacb;
+  border: var(--terra-card-border, 1px solid #c8cacb);
+  border-radius: 3px;
+  border-radius: var(--terra-card-border-radius, 3px);
+  -webkit-box-shadow: none;
+  -webkit-box-shadow: var(--terra-card-box-shadow, none);
+          box-shadow: none;
+          box-shadow: var(--terra-card-box-shadow, none);
+  color: inherit;
+  color: var(--terra-card-color, inherit);
+  overflow: hidden; }
+ {
+  /* stylelint-disable selector-class-pattern  */ }
+  .CardBody__vertical-padding___3AB2y {
+    padding-bottom: 10px;
+    padding-bottom: var(--terra-card-padding-bottom, 10px);
+    padding-top: 10px;
+    padding-top: var(--terra-card-padding-top, 10px); }
+  .CardBody__horizontal-padding___sp0cw {
+    padding-left: 10px;
+    padding-left: var(--terra-card-padding-left, 10px);
+    padding-right: 10px;
+    padding-right: var(--terra-card-padding-right, 10px); }
+.card__decision-card___2ZxYN {
+  padding: 15px;
+  margin: 10px;
+  background: #fcfcfc;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  border-left-width: 3px; }
+
+img {
+  display: block;
+  width: 100px;
+  margin: 0 0 5px; }
+
+.card__card-top___2jSbr {
+  position: relative; }
+
+.card__source-link___2DHw1 {
+  margin-right: 8px; }
+
+.card__card-source___1uaqb {
+  font-size: .85em;
+  font-style: italic;
+  margin: 0 0 5px; }
+
+.card__card-summary___3HXnn {
+  margin: 0 0 5px; }
+
+.card__alert-info___3ITYt {
+  border-left-color: #0079be; }
+
+.card__alert-warning___3qOGg {
+  border-left-color: #ffae42; }
+
+.card__alert-hard-stop___2CBtS {
+  border-left-color: #c00; }
+
+.card__alert-error___3DRy- {
+  border-left-color: #333; }
 .patient-view__patient-view___1GOM4 {
   height: auto;
   display: inline-block;
@@ -2606,36 +2674,6 @@ body {
     -webkit-box-shadow: unset;
             box-shadow: unset;
     outline: none; }
-/* stylelint-disable scss/at-mixin-pattern  */
-/* stylelint-enable scss/at-mixin-pattern  */
-/* stylelint-disable scss/at-mixin-pattern  */
-/* stylelint-enable scss/at-mixin-pattern  */
-.Card__card___1DhLP {
-  background-color: #fff;
-  background-color: var(--terra-card-background-color, #fff);
-  border: 1px solid #c8cacb;
-  border: var(--terra-card-border, 1px solid #c8cacb);
-  border-radius: 3px;
-  border-radius: var(--terra-card-border-radius, 3px);
-  -webkit-box-shadow: none;
-  -webkit-box-shadow: var(--terra-card-box-shadow, none);
-          box-shadow: none;
-          box-shadow: var(--terra-card-box-shadow, none);
-  color: inherit;
-  color: var(--terra-card-color, inherit);
-  overflow: hidden; }
- {
-  /* stylelint-disable selector-class-pattern  */ }
-  .CardBody__vertical-padding___3AB2y {
-    padding-bottom: 10px;
-    padding-bottom: var(--terra-card-padding-bottom, 10px);
-    padding-top: 10px;
-    padding-top: var(--terra-card-padding-top, 10px); }
-  .CardBody__horizontal-padding___sp0cw {
-    padding-left: 10px;
-    padding-left: var(--terra-card-padding-left, 10px);
-    padding-right: 10px;
-    padding-right: var(--terra-card-padding-right, 10px); }
  {
   /**
    * Used to hide the content visually, yet provide the content to screen readers,
@@ -2773,3 +2811,5 @@ body {
     -webkit-transform: none;
     -moz-transform: none;
     -ms-transform: none; } }
+
+/*# sourceMappingURL=styles.css.map*/
