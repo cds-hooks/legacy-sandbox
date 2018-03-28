@@ -44,6 +44,7 @@ export class FhirServerEntry extends Component {
 
   handleCloseModal() {
     this.setState({ isOpen: false, shouldDisplayError: false, errorMessage: '' });
+    if (this.props.closePrompt) this.props.closePrompt();
   }
 
   handleChange(e) {
@@ -62,21 +63,22 @@ export class FhirServerEntry extends Component {
       });
     }
     try {
-      const checkValidFhirServer = await retrieveFhirMetadata(checkUrl);
+      const checkValidFhirServer = await retrieveFhirMetadata(checkUrl).then(() => {
+        if (this.props.resolve) this.props.resolve();
+        this.handleCloseModal();
+      });
     } catch (e) {
       return this.setState({ 
         shouldDisplayError: true, 
         errorMessage: 'Failed to connect to the FHIR server. See console for details.' 
       });
     }
-    this.setState({ isOpen: false, shouldDisplayError: false, errorMessage: '' });
-    this.props.resolve();
-    this.props.closePrompt();
   }
 
   async handleResetDefaultServer() {
     const retrieval = await retrieveFhirMetadata();
-    this.setState({ isOpen: false, shouldDisplayError: false, errorMessage: '' });
+    if (this.props.resolve) this.props.resolve();
+    this.handleCloseModal();
   }
 
   render() {
@@ -85,7 +87,7 @@ export class FhirServerEntry extends Component {
     );
 
     const footerContainer = (<div className={styles['right-align']}>
-      {this.props.resolve ? '' : 
+      {this.props.isEntryRequired ? '' : 
       <div className={styles['left-aligned-text']}>
         <Button text="Reset to default FHIR server" 
                 variant='de-emphasis' 

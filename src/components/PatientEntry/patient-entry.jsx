@@ -13,6 +13,7 @@ import BaseEntryBody from '../BaseEntryBody/base-entry-body';
 import retrievePatient from '../../retrieve-data-helpers/patient-retrieval';
 
 const propTypes = {
+  closePrompt: PropTypes.func,
   currentFhirServer: PropTypes.string.isRequired,
   currentPatientId: PropTypes.string.isRequired,
   isEntryRequired: PropTypes.bool,
@@ -44,6 +45,7 @@ export class PatientEntry extends Component {
 
   handleCloseModal() {
     this.setState({ isOpen: false, shouldDisplayError: false, errorMessage: '' });
+    if (this.props.closePrompt) this.props.closePrompt();
   }
 
   handleChange(e) {
@@ -56,16 +58,16 @@ export class PatientEntry extends Component {
     }
 
     try {
-      const checkValidPatient = await retrievePatient(this.state.userInput);
+      const checkValidPatient = await retrievePatient(this.state.userInput).then(() => {
+        if (this.props.resolve) this.props.resolve();
+        this.handleCloseModal();
+      });
     } catch (e) {
       return this.setState({ 
         shouldDisplayError: true, 
         errorMessage: 'Failed to retrieve patient from FHIR server. See console for details.' 
       });
     }
-    this.setState({ isOpen: false, shouldDisplayError: false, errorMessage: '' });
-    if (this.props.resolve) this.props.resolve();
-    if (this.props.closePrompt) this.props.closePrompt();
   }
 
   render() {
