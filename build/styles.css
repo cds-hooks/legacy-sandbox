@@ -1964,14 +1964,11 @@ body {
     padding: 0;
     position: absolute;
     width: 1px; }
-.patient-entry__right-align___m4k3h {
+.services-entry__right-align___3W6r9 {
   text-align: right; }
 
-.patient-entry__left-aligned-text___1yb9- {
-  float: left; }
-
 @media screen and (min-width: 48em) {
-  .patient-entry__fixed-size___3AX2l {
+  .services-entry__fixed-size___272Ct {
     height: 75%;
     width: 100%; } }
 .Field__field___141Wx {
@@ -2175,6 +2172,16 @@ body {
 
 .base-entry-body__vertical-separation___1yiU1 {
   padding-top: 20px; }
+.patient-entry__right-align___m4k3h {
+  text-align: right; }
+
+.patient-entry__left-aligned-text___1yb9- {
+  float: left; }
+
+@media screen and (min-width: 48em) {
+  .patient-entry__fixed-size___3AX2l {
+    height: 75%;
+    width: 100%; } }
 .fhir-server-entry__right-align___26grE {
   text-align: right; }
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 import pickBy from 'lodash/pickBy';
 import forIn from 'lodash/forIn';
+import isEqual from 'lodash/isEqual';
 
 import styles from './patient-view.css';
 import callServices from '../../retrieve-data-helpers/service-exchange';
@@ -19,7 +20,9 @@ export class PatientView extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.patient !== prevProps.patient || this.props.fhirServer !== prevProps.fhirServer) {
+    if (this.props.patient !== prevProps.patient || 
+        this.props.fhirServer !== prevProps.fhirServer || 
+        !isEqual(this.props.services, prevProps.services)) {
       this.executeRequests();
     }
   }
@@ -61,7 +64,8 @@ const mapStateToProps = (store) => {
     isContextVisible: store.hookState.isContextVisible,
     patient: store.patientState.currentPatient,
     fhirServer: store.fhirServerState.currentFhirServer,
-    services: pickBy(store.cdsServicesState.configuredServices, isCorrectHook)
+    services: pickBy(store.cdsServicesState.configuredServices, isCorrectHook),
+    hook: store.hookState.currentHook,
   }
 };
 

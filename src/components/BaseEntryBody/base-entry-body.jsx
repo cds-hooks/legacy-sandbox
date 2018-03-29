@@ -7,11 +7,20 @@ import styles from './base-entry-body.css';
 
 const BaseEntryBody = ({currentFhirServer, formFieldLabel, shouldDisplayError, 
   errorMessage, placeholderText, inputOnChange, inputName}) => {
+
+  let fhirServerDisplay;  
+  if (currentFhirServer) {
+    fhirServerDisplay = (
+      <div>
+        <Text weight={400} fontSize={16}>Current FHIR server</Text><br />
+        <Text weight={200} fontSize={14}>{currentFhirServer}</Text>
+      </div>
+    );
+  }  
   
   return (
     <div className={styles['container']}>
-      <Text weight={400} fontSize={16}>Current FHIR server</Text><br />
-      <Text weight={200} fontSize={14}>{currentFhirServer}</Text>
+      {fhirServerDisplay}
       <div className={styles['vertical-separation']}>
         <Field label={formFieldLabel} 
                error='This field is required'
