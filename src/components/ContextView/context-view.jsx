@@ -88,8 +88,8 @@ export class ContextView extends Component {
 }
 
 const mapStateToProps = (store) => {
-  function isCorrectHook(service) {
-    return service.hook && service.hook === store.hookState.currentHook;
+  function isValidService(service) {
+    return service.hook && service.hook === store.hookState.currentHook && service.enabled;
   }
 
   function getFirstServiceForHook(services) {
@@ -101,9 +101,9 @@ const mapStateToProps = (store) => {
 
   return {
     isContextVisible: store.hookState.isContextVisible,
-    services: pickBy(store.cdsServicesState.configuredServices, isCorrectHook),
+    services: pickBy(store.cdsServicesState.configuredServices, isValidService),
     selectedService: store.serviceExchangeState.selectedService,
-    initialService: getFirstServiceForHook(pickBy(store.cdsServicesState.configuredServices, isCorrectHook)),
+    initialService: getFirstServiceForHook(pickBy(store.cdsServicesState.configuredServices, isValidService)),
     exchanges: store.serviceExchangeState.exchanges,
   }
 };

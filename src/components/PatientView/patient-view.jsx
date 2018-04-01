@@ -56,15 +56,15 @@ export class PatientView extends Component {
 }
 
 const mapStateToProps = (store) => {
-  function isCorrectHook(service) {
-    return service.hook === 'patient-view';
+  function isValidService(service) {
+    return service.hook === 'patient-view' && service.enabled;
   }
 
   return {
     isContextVisible: store.hookState.isContextVisible,
     patient: store.patientState.currentPatient,
     fhirServer: store.fhirServerState.currentFhirServer,
-    services: pickBy(store.cdsServicesState.configuredServices, isCorrectHook),
+    services: pickBy(store.cdsServicesState.configuredServices, isValidService),
     hook: store.hookState.currentHook,
   }
 };
