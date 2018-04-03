@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import cx from 'classnames';
@@ -11,6 +12,10 @@ import styles from './card.css';
 import retrieveLaunchContext from '../../retrieve-data-helpers/launch-context-retrieval';
 import { getServicesByHook, getCardsFromServices } from '../../reducers/helpers/services-filter';
 
+const propTypes = {
+  isDemoCard: PropTypes.bool,
+};
+
 export class Card extends Component {
   constuctor() {
     this.takeSuggestion = this.takeSuggestion.bind(this);
@@ -20,7 +25,9 @@ export class Card extends Component {
   
   // TODO: Perform logic to add suggestion and make necessary changes to app state
   takeSuggestion(suggestion) {
-    console.log("Taking a suggestion");
+    if (!this.props.isDemoCard) {
+      console.log("Taking a suggestion");
+    }
   }
 
   /**
@@ -28,7 +35,9 @@ export class Card extends Component {
    * @param {*} e - Event emitted when source link is clicked
    */
   launchSource(e) { 
-    e.preventDefault(); 
+    if (!this.props.isDemoCard) {
+      e.preventDefault();
+    } 
   }
 
   /**
@@ -38,12 +47,14 @@ export class Card extends Component {
    * @param {*} link - Link object that contains the URL and any error state to catch
    */
   launchLink(e, link) {
-    e.preventDefault();
-    if (link.error) {
-      // TODO: Create an error modal to display for SMART link that cannot be launched securely
-      return;
+    if (!this.props.isDemoCard) {
+      e.preventDefault();
+      if (link.error) {
+        // TODO: Create an error modal to display for SMART link that cannot be launched securely
+        return;
+      }
+      window.open(link.url, '_blank');
     }
-    window.open(link.url, '_blank');
   }
 
   /**
@@ -53,22 +64,24 @@ export class Card extends Component {
    * @param {*} card - Card object to process the links for
    */
   modifySmartLaunchUrls(card) {
-    return card.links.map((link) => {
-      if (link.type === 'smart' && this.props.fhirAccessToken) {
-        retrieveLaunchContext(link).then((result) => {
-          return result;
-        });
-      } else if (link.type === 'smart') {
-        if (link.url.indexOf('?') < 0) {
-          link.url += '?';
-        } else {
-          link.url += '&';
+    if (!this.props.isDemoCard) {
+      return card.links.map((link) => {
+        if (link.type === 'smart' && this.props.fhirAccessToken) {
+          retrieveLaunchContext(link).then((result) => {
+            return result;
+          });
+        } else if (link.type === 'smart') {
+          if (link.url.indexOf('?') < 0) {
+            link.url += '?';
+          } else {
+            link.url += '&';
+          }
+          link.url += `fhirServiceUrl=${this.props.fhirServerUrl}`;
+          link.url += `&patientId=${this.props.patientId}`;
         }
-        link.url += `fhirServiceUrl=${this.props.fhirServerUrl}`;
-        link.url += `&patientId=${this.props.patientId}`;
-      }
-      return link;
-    });
+        return link;
+      });
+    }
   }
 
   /**
@@ -79,13 +92,19 @@ export class Card extends Component {
     if (!source.label) return;
     let icon;
     if (source.icon) {
-      icon = <img src={source.icon} alt="Could not fetch icon" width="100" height="100" />;
+      icon = <img className={styles['card-icon']} src={source.icon} alt="Could not fetch icon" width="100" height="100" />;
     }
-
-    return (<div className={styles['card-source']}>
-      Source: <a href={source.url || '#'} onClick={e => this.launchSource(e)}>{source.label}</a>
-      {icon}
-    </div>);
+    if (!this.props.isDemoCard) {
+      return (<div className={styles['card-source']}>
+        Source: <a href={source.url || '#'} onClick={e => this.launchSource(e)}>{source.label}</a>
+        {icon}
+      </div>);
+    } else {
+      return (<div className={styles['card-source']}>
+        Source: <a onClick={e => this.launchSource(e)}>{source.label}</a>
+        {icon}
+      </div>);
+    }
   }
 
   render() {
@@ -134,7 +153,7 @@ export class Card extends Component {
       // -- Links --
       let linksSection;
       if (card.links) {
-        card.links = this.modifySmartLaunchUrls(card);
+        card.links = this.modifySmartLaunchUrls(card) || card.links;
         linksSection = card.links.map((link, ind) => {
           return (
             <Button key={ind} 
@@ -161,7 +180,7 @@ export class Card extends Component {
         </TerraCard>
       );
     });
-    if (renderedCards.length === 0) return <div>No Cards</div>;
+    if (renderedCards.length === 0 && this.props.isDemoCard) return <div>No Cards</div>;
     return <div>{renderedCards}</div>
   }
 }

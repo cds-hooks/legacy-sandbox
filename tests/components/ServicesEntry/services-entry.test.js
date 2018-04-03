@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-describe('FhirServerEntry component', () => {
+describe('ServicesEntry component', () => {
   let ServicesEntryView;
   let mockSpy;
   console.error = jest.fn();

@@ -14,6 +14,7 @@ import PatientView from '../PatientView/patient-view';
 import ContextView from '../ContextView/context-view';
 import FhirServerEntry from '../FhirServerEntry/fhir-server-entry';
 import PatientEntry from '../PatientEntry/patient-entry';
+import CardDemo from '../CardDemo/card-demo';
 import { setLoadingStatus } from '../../actions/ui-actions';
 
 export class MainView extends Component {
@@ -80,10 +81,10 @@ export class MainView extends Component {
 
   render() {
     const hookView = this.props.hook === 'patient-view' ? <PatientView /> : <div>Med Prescribe View</div>;
-    const container = <div className={styles.container}>
+    const container = !this.props.isCardDemoView ? <div className={styles.container}>
       {hookView}
       <ContextView />
-    </div>;
+    </div> : <div className={styles.container}><CardDemo /></div>;
 
     return (
       <div>
@@ -107,6 +108,7 @@ const mapStateToProps = (store) => {
   return {
     hook: store.hookState.currentHook,
     isLoadingData: store.hookState.isLoadingData,
+    isCardDemoView: store.cardDemoState.isCardDemoView,
   }
 };
 

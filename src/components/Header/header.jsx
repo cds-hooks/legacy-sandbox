@@ -5,6 +5,9 @@ import ApplicationHeaderLayout from 'terra-application-header-layout';
 import IconSettings from 'terra-icon/lib/icon/IconSettings';
 import IconChevronDown from 'terra-icon/lib/icon/IconChevronDown';
 import Menu from 'terra-menu';
+import Button from 'terra-button';
+import IconLeft from 'terra-icon/lib/icon/IconLeft';
+import IconEdit from 'terra-icon/lib/icon/IconEdit';
 
 import ConfigureServices from '../ConfigureServices/configure-services';
 import ServicesEntry from '../ServicesEntry/services-entry';
@@ -15,6 +18,7 @@ import retrievePatient from '../../retrieve-data-helpers/patient-retrieval';
 import retrieveDiscoveryServices from '../../retrieve-data-helpers/discovery-services-retrieval';
 import { setHook } from '../../actions/hook-actions';
 import { resetServices } from '../../actions/cds-services-actions';
+import { toggleDemoView } from '../../actions/card-demo-actions';
 import cdsHooksLogo from '../../assets/cds-hooks-logo.png';
 import styles from './header.css';
 
@@ -124,6 +128,13 @@ export class Header extends Component {
         <a className={this.getNavClasses('medication-prescribe')} onClick={() => this.switchHook('medication-prescribe')}>Rx View</a>
       </div>
     </div>;
+    const extensions = <div className={styles['extensions']}>
+      <Button text={this.props.isCardDemoView ? 'Go Back' : 'Card Demo'}
+              isIconOnly={false}
+              icon={this.props.isCardDemoView ? <IconLeft /> : <IconEdit />}
+              variant={'action'}
+              onClick={this.props.toggleCardDemoView} />
+    </div>
     const utilities=<div className={styles.icon} onClick={this.openSettingsMenu}>
       <span className={styles['padding-right']}><IconSettings height={'1.2em'} width={'1.2em'} /></span>
       <span className={styles['padding-right']} ref={this.setSettingsNode} ><IconChevronDown height={'1em'} width={'1em'} /></span>
@@ -131,7 +142,11 @@ export class Header extends Component {
 
     return (
       <div>
-        <ApplicationHeaderLayout logo={logo} navigation={navigation} utilities={utilities} style={{'backgroundColor': '#384e77'}} />
+        <ApplicationHeaderLayout logo={logo} 
+                                 navigation={this.props.isCardDemoView ? null : navigation} 
+                                 extensions={extensions}
+                                 utilities={utilities}
+                                 style={{'backgroundColor': '#384e77'}} />
         {gearMenu}
         {this.state.isAddServicesOpen ? <ServicesEntry isOpen={this.state.isAddServicesOpen} 
                                                        closePrompt={this.closeAddServices} /> : null}
@@ -152,6 +167,7 @@ const mapStateToProps = (store) => {
   return {
     hook: store.hookState.currentHook,
     patientId: store.patientState.currentPatient.id,
+    isCardDemoView: store.cardDemoState.isCardDemoView,
   }
 };
 
@@ -162,6 +178,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     resetServices: () => {
       dispatch(resetServices());
+    },
+    toggleCardDemoView: () => {
+      dispatch(toggleDemoView());
     }
   }
 };
