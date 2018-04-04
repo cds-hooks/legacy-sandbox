@@ -5,7 +5,10 @@ addLocaleData(localeData);
 
 const messages = {
   "Terra.ajax.error": "This content failed to load.",
+  "Terra.datePicker.today": "Today",
+  "Terra.datePicker.openCalendar": "Open Calendar",
   "Terra.form.field.optional": "(opcional)",
+  "Terra.form.select.defaultDisplay": "- Predeterminado -",
   "Terra.Overlay.loading": "Loading..."
 };
 const areTranslationsLoaded = true;

@@ -35,3 +35,15 @@ export function getCardsFromServices(serviceUrls) {
   });
   return totalCards;
 }
+
+/**
+ * Filter all valid condition resource entries under the current patient to find the resource
+ * that matches that of the coding code
+ * @param {*} code - Condition coding code to filter the patient conditions by
+ */
+export function getConditionCodingFromCode(code) {
+  const conditions = Object.assign([], store.getState().patientState.currentPatient.conditionsResources);
+  return conditions.filter(condition => (
+    condition.resource.code.coding[0].code === code
+  ));
+}

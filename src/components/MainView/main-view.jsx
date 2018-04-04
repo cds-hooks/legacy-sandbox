@@ -11,6 +11,7 @@ import store from '../../store/store';
 import styles from './main-view.css';
 import Header from '../Header/header';
 import PatientView from '../PatientView/patient-view';
+import RxView from '../RxView/rx-view';
 import ContextView from '../ContextView/context-view';
 import FhirServerEntry from '../FhirServerEntry/fhir-server-entry';
 import PatientEntry from '../PatientEntry/patient-entry';
@@ -80,7 +81,7 @@ export class MainView extends Component {
   }
 
   render() {
-    const hookView = this.props.hook === 'patient-view' ? <PatientView /> : <div>Med Prescribe View</div>;
+    const hookView = this.props.hook === 'patient-view' ? <PatientView /> : <RxView />;
     const container = !this.props.isCardDemoView ? <div className={styles.container}>
       {hookView}
       <ContextView />
