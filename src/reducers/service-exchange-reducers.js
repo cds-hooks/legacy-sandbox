@@ -30,6 +30,12 @@ const serviceExchangeReducers = (state = initialState, action) => {
         break;
       }
 
+      case types.SET_HOOK: {
+        return Object.assign({}, state, {
+          selectedService: '',
+        });
+      }
+
       case types.RESET_SERVICES: {
         return Object.assign({}, state, {
           selectedService: '',

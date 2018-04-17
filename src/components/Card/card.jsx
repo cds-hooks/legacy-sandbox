@@ -11,6 +11,7 @@ import Button from 'terra-button';
 import styles from './card.css';
 import retrieveLaunchContext from '../../retrieve-data-helpers/launch-context-retrieval';
 import { getServicesByHook, getCardsFromServices } from '../../reducers/helpers/services-filter';
+import { takeSuggestion } from '../../actions/medication-select-actions';
 
 const propTypes = {
   isDemoCard: PropTypes.bool,
@@ -26,7 +27,12 @@ export class Card extends Component {
   // TODO: Perform logic to add suggestion and make necessary changes to app state
   takeSuggestion(suggestion) {
     if (!this.props.isDemoCard) {
-      console.log("Taking a suggestion");
+      if (suggestion.label) {
+        // TODO: Make call to analytics endpoint
+        this.props.takeSuggestion(suggestion);
+      } else {
+        console.error("There was no label on this suggestions", suggestion);
+      }
     }
   }
 
@@ -195,4 +201,10 @@ const mapStateToProps = (store) => {
   }
 };
 
-export default connect(mapStateToProps)(Card);
+const mapDispatchToProps = dispatch => ({
+  takeSuggestion: (suggestion) => {
+    dispatch(takeSuggestion(suggestion));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

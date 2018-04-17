@@ -31,11 +31,11 @@ const patientReducers = (state = initialState, action) => {
         if (action.conditions && action.conditions.total > 0) {
           const conditionCodes = [];
           filteredEntries = action.conditions.entry.filter((item) => {
-            const {resource} = item;
+            const { resource } = item;
             const hasAppropriateCode = resource && resource.code && resource.code.coding &&
               resource.code.coding[0] && resource.code.coding[0].code;
             if (hasAppropriateCode) {
-              const isDuplicate =  conditionCodes.indexOf(resource.code.coding[0].code);
+              const isDuplicate = conditionCodes.indexOf(resource.code.coding[0].code);
               if (isDuplicate < 0) {
                 conditionCodes.push(resource.code.coding[0].code);
                 return true;
@@ -45,7 +45,7 @@ const patientReducers = (state = initialState, action) => {
             return false;
           });
         }
-        filteredEntries = filteredEntries.sort((a,b)=> {
+        filteredEntries = filteredEntries.sort((a, b) => {
           if (a.resource.code.text < b.resource.code.text) return -1;
           if (b.resource.code.text < a.resource.code.text) return 1;
           return 0;

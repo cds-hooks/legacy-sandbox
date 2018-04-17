@@ -25,15 +25,6 @@ import { storeUserMedInput, storeUserChosenMedication,
   storeMedDosageAmount, storeDate, toggleDate } from '../../actions/medication-select-actions';
 
 export class RxView extends Component {
-  static getDerivedStateFromProps(nextProps) {
-    if (nextProps.prescription) {
-      return {
-        value: '',
-      };
-    }
-    return null;
-  }
-
   constructor(props) {
     super(props);
 
@@ -61,20 +52,30 @@ export class RxView extends Component {
     this.toggleEnabledDate = this.toggleEnabledDate.bind(this);
   }
 
-  // When patient view mounts, execute CDS Service requests configured for this hook
-  componentDidUpdate(prevProps) {
-    if (this.props.patient !== prevProps.patient ||
-        this.props.fhirServer !== prevProps.fhirServer ||
-        !isEqual(this.props.services, prevProps.services) ||
-        this.props.prescription !== prevProps.prescription) {
+  componentDidMount() {
+    if (this.props.prescription) {
+      this.executeRequests();
+    }
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (!isEqual(prevProps.prescription, this.props.prescription) ||
+        prevProps.patient !== this.props.patient ||
+        prevProps.fhirServer !== this.props.fhirServer ||
+        !isEqual(prevProps.services, this.props.services) || 
+        !isEqual(prevProps.medicationInstructions, this.props.medicationInstructions) || 
+        !isEqual(prevProps.prescriptionDates, this.props.prescriptionDates) || 
+        prevProps.selectedConditionCode !== this.props.selectedConditionCode) {
+      await this.props.updateFhirResource(this.props.fhirVersion, this.props.patient.id);
       if (this.props.prescription) {
         this.executeRequests();
       }
     }
+    return null;
   }
 
   selectCondition(e, value) {
-    this.props.chooseCondition(value, this.props.fhirVersion, this.props.patient.id);
+    this.props.chooseCondition(value);
   }
 
   changeMedicationInput(event) {
@@ -87,12 +88,12 @@ export class RxView extends Component {
     if (transformedNumber > 5) transformedNumber = 5;
     if (transformedNumber < 1) transformedNumber = 1;
     this.setState({ dosageAmount: transformedNumber });
-    this.props.updateDosageInstructions(transformedNumber, this.state.dosageFrequency, this.props.fhirVersion, this.props.patient.id);
+    this.props.updateDosageInstructions(transformedNumber, this.state.dosageFrequency);
   }
 
   changeDosageFrequency(e, value) {
     this.setState({ dosageFrequency: value });
-    this.props.updateDosageInstructions(this.state.dosageAmount, value, this.props.fhirVersion, this.props.patient.id);
+    this.props.updateDosageInstructions(this.state.dosageAmount, value);
   }
 
   selectStartDate(e, value) {
@@ -103,7 +104,7 @@ export class RxView extends Component {
     this.setState({
       startRange: newStartRange,
     });
-    this.props.updateDate('start', newStartRange, this.props.fhirVersion, this.props.patient.id);
+    this.props.updateDate('start', newStartRange);
   }
 
   selectEndDate(e, value) {
@@ -114,7 +115,7 @@ export class RxView extends Component {
     this.setState({
       endRange: newEndRange,
     });
-    this.props.updateDate('end', newEndRange, this.props.fhirVersion, this.props.patient.id);
+    this.props.updateDate('end', newEndRange);
   }
 
   toggleEnabledDate(e, range) {
@@ -126,7 +127,12 @@ export class RxView extends Component {
     if (Object.keys(this.props.services).length) {
       // For each service, call service for request/response exchange
       forIn(this.props.services, (val, key) => {
-        callServices(key);
+        // TODO: Once default services are fixed to parse FHIR bundle, change this to FHIR bundle format
+        const context = [{
+          key: 'medications',
+          value: [this.props.medicationOrder],
+        }];
+        callServices(key, context);
       });
     }
   }
@@ -176,7 +182,7 @@ export class RxView extends Component {
                   key={med.id}
                   content={<p>{med.name}</p>}
                   isSelectable
-                  onClick={() => { this.props.chooseMedication(med, this.props.medListPhase, this.props.fhirVersion, this.props.patient.id); }}
+                  onClick={() => { this.props.chooseMedication(med); }}
                 />))
               }
             </List>
@@ -232,6 +238,8 @@ export class RxView extends Component {
             </Field>
           </div>
         </form>
+
+        {Object.keys(this.props.services).length ? <Card /> : 'Retrieving services...'}
       </div>
     );
   }
@@ -252,6 +260,10 @@ const mapStateToProps = (store) => {
     medListPhase: store.medicationState.medListPhase,
     medications: store.medicationState.options[store.medicationState.medListPhase] || [],
     prescription: store.medicationState.decisions.prescribable,
+    medicationInstructions: store.medicationState.medicationInstructions,
+    prescriptionDates: store.medicationState.prescriptionDates,
+    selectedConditionCode: store.medicationState.selectedConditionCode,
+    medicationOrder: store.medicationState.fhirResource,
   };
 };
 
@@ -260,26 +272,22 @@ const mapDispatchToProps = dispatch => (
     onMedicationChangeInput: (input) => {
       dispatch(storeUserMedInput(input));
     },
-    chooseMedication: (medication, medListPhase, fhirVersion, patientId) => {
+    chooseMedication: (medication) => {
       dispatch(storeUserChosenMedication(medication));
-      if (medListPhase === 'prescribable') {
-        dispatch(updateFhirMedicationOrder(fhirVersion, patientId));
-      }
     },
-    chooseCondition: (condition, fhirVersion, patientId) => {
+    chooseCondition: (condition) => {
       dispatch(storeUserCondition(condition));
-      dispatch(updateFhirMedicationOrder(fhirVersion, patientId));
     },
-    updateDosageInstructions: (amount, frequency, fhirVersion, patientId) => {
+    updateDosageInstructions: (amount, frequency) => {
       dispatch(storeMedDosageAmount(amount, frequency));
-      dispatch(updateFhirMedicationOrder(fhirVersion, patientId));
     },
-    updateDate: (range, date, fhirVersion, patientId) => {
+    updateDate: (range, date) => {
       dispatch(storeDate(range, date));
-      dispatch(updateFhirMedicationOrder(fhirVersion, patientId));
     },
-    toggleEnabledDate: (range, fhirVersion, patientId) => {
+    toggleEnabledDate: (range) => {
       dispatch(toggleDate(range));
+    },
+    updateFhirResource: (fhirVersion, patientId) => {
       dispatch(updateFhirMedicationOrder(fhirVersion, patientId));
     },
   }

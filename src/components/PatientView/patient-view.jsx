@@ -51,7 +51,7 @@ export class PatientView extends Component {
         <div className={styles['patient-data-text']}>
           <p><strong>ID: </strong> {pid} <strong>Birthdate: </strong> {dob}</p>
         </div>
-        {Object.keys(this.props.services).length ? <Card /> : 'Retrieving services...'}
+        {Object.keys(this.props.services).length ? <Card /> : ''}
       </div>
     );
   }
