@@ -16,6 +16,9 @@ describe('Card component', () => {
   let fhirBaseUrl;
   let accessToken;
   let cardResponses;
+  let takeSuggestion;
+  let suggestion;
+  let invalidSuggestion;
 
   let windowSpy;
 
@@ -25,7 +28,8 @@ describe('Card component', () => {
     let component = <Card fhirServerUrl={fhirBaseUrl} 
                           fhirAccessToken={accessToken} 
                           patientId={patientId} 
-                          cardResponses={cardResponses} />;
+                          cardResponses={cardResponses}
+                          takeSuggestion={takeSuggestion} />;
     shallowedComponent = shallow(component);
   }
 
@@ -40,11 +44,19 @@ describe('Card component', () => {
     mockSpy = jest.fn(() => {
       return Promise.resolve(`${fhirBaseUrl}/launch=123iss=456`);
     });
+    takeSuggestion = jest.fn();
+    suggestion = {
+      label: 'sug-label',
+      resource: {
+        foo: 'foo',
+      },
+    };
+    invalidSuggestion = { foo: 'foo' };
     cardResponses = {
       cards: [
         {
           links: [{ type: 'smart', url: smartLink }],
-          suggestions: [{ label: 'sug-label' }],
+          suggestions: [suggestion, invalidSuggestion],
           summary: 'Summary',
           indicator: 'warning',
           source: { label: 'Patient service', url: 'http://example-source.com', icon: 'http://icon.com' },
@@ -106,8 +118,13 @@ describe('Card component', () => {
     expect(windowSpy).not.toHaveBeenCalled();
   });
 
-  // TODO: when suggestion is implemented, revise this test
-  it('takes a suggestion', () => {
-    shallowedComponent.find('.suggestions-section').find('Button').simulate('click', { preventDefault() {} });
+  it('takes a suggestion if there is a label', () => {
+    shallowedComponent.find('.suggestions-section').find('Button').at(0).simulate('click', { preventDefault() {} });
+    expect(takeSuggestion).toHaveBeenCalledWith(suggestion);
+  });
+
+  it('does not take a suggestion if it is does not have a label', () => {
+    shallowedComponent.find('.suggestions-section').find('Button').at(1).simulate('click', { preventDefault() {} });
+    expect(takeSuggestion).not.toHaveBeenCalled();
   });
 });
