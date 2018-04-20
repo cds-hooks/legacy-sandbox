@@ -73,7 +73,8 @@ export class Card extends Component {
     if (!this.props.isDemoCard) {
       return card.links.map((link) => {
         if (link.type === 'smart' && this.props.fhirAccessToken) {
-          retrieveLaunchContext(link).then((result) => {
+          retrieveLaunchContext(link, this.props.fhirAccessToken,
+            this.props.patientId, this.props.fhirServerUrl).then((result) => {
             return result;
           });
         } else if (link.type === 'smart') {
@@ -141,7 +142,7 @@ export class Card extends Component {
       let sourceSection = card.source && Object.keys(card.source).length ? this.renderSource(card.source) : '';
 
       // -- Detail --
-      let detailSection = card.detail ? <ReactMarkdown source={card.detail} /> : '';
+      let detailSection = card.detail ? <ReactMarkdown escapeHtml={false} softBreak="br" source={card.detail} /> : '';
 
       // -- Suggestions --
       let suggestionsSection;

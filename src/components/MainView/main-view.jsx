@@ -17,6 +17,7 @@ import FhirServerEntry from '../FhirServerEntry/fhir-server-entry';
 import PatientEntry from '../PatientEntry/patient-entry';
 import CardDemo from '../CardDemo/card-demo';
 import { setLoadingStatus } from '../../actions/ui-actions';
+import { setHook } from '../../actions/hook-actions';
 
 export class MainView extends Component {
   constructor(props) {
@@ -46,8 +47,10 @@ export class MainView extends Component {
    */
   async componentDidMount()  {
     this.props.setLoader(true);
+    this.props.setHook(localStorage.getItem('PERSISTED_hook') || 'patient-view');
     const smartLaunch = await smartLaunchPromise().catch(async () => {
-      const getFhirServer = await retrieveFhirMetadata().catch(() => {
+      const persistedFhirServer = localStorage.getItem('PERSISTED_fhirServer');
+      const getFhirServer = await retrieveFhirMetadata(persistedFhirServer).catch(() => {
         return new Promise((resolve) => {
           this.setState({ 
             fhirServerPrompt: true,
@@ -57,7 +60,8 @@ export class MainView extends Component {
       });
     });
     if (this.state.fhirServerPrompt) this.setState({ fhirServerPrompt: false });
-    const getPatient = await retrievePatient().catch(() => {
+    const persistedPatientId = localStorage.getItem('PERSISTED_patientId');
+    const getPatient = await retrievePatient(persistedPatientId).catch(() => {
       return new Promise((resolve) => {
         this.setState({
           patientPrompt: true,
@@ -66,6 +70,15 @@ export class MainView extends Component {
       });
     });
     if (this.state.patientPrompt) this.setState({ patientPrompt: false });
+    const persistedServices = localStorage.getItem('PERSISTED_cdsServices');
+    if (persistedServices) {
+      const parsedServices = JSON.parse(persistedServices);
+      if (parsedServices && parsedServices.length) {
+        await parsedServices.forEach(async (discoveryEndpoint) => {
+          await retrieveDiscoveryServices(discoveryEndpoint);
+        });
+      }
+    }
     const getServiceDefinitions = await retrieveDiscoveryServices().catch(() => {
       this.props.setLoader(false);
     });
@@ -117,7 +130,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setLoader: (status) => {
       dispatch(setLoadingStatus(status));
-    }
+    },
+    setHook: (hook) => {
+      dispatch(setHook(hook));
+    },
   }
 };
 

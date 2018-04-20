@@ -1,6 +1,7 @@
 import { signalSuccessFhirServerRetrieval } from '../actions/fhir-server-actions';
 import { signalSuccessSmartAuth, signalFailureSmartAuth } from '../actions/smart-auth-actions';
 import store from '../store/store';
+import retrieveDiscoveryServices from './discovery-services-retrieval';
 
 /**
  * Handle SMART launch (Oauth2 response) accordingly if Sandbox is launched as a SMART on FHIR app.
@@ -26,6 +27,15 @@ function smartLaunchPromise() {
           deferredToPromise.then((result) => {
             store.dispatch(signalSuccessSmartAuth(smart));
             store.dispatch(signalSuccessFhirServerRetrieval(fhirBaseUrl, result.data));
+            // For SMART App Launcher, add ability to configure CDS Service automatically into the sandbox from a
+            // custom property in the access token response called "serviceDiscoveryURL"
+            if (smart.tokenResponse.serviceDiscoveryURL) {
+              let discoveryURL = smart.tokenResponse.serviceDiscoveryURL;
+              if (!/^(https?:)?\/\//i.test(discoveryURL)) {
+                discoveryURL = `http://${discoveryURL}`;
+              }
+              retrieveDiscoveryServices(discoveryURL);
+            }
             return resolve(result.data);
           }).catch((err) => {
             console.error('Failed to get metadata from secured FHIR server. Launching sandbox openly', err);

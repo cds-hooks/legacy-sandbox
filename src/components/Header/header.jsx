@@ -110,16 +110,20 @@ export class Header extends Component {
 
   render() {
     const logo=<div><span><img src={cdsHooksLogo} height='30' width='30' /></span><b className={styles['logo-title']}>CDS Hooks Sandbox</b></div>;
+    const changeFhirServer = this.props.isSecuredSandbox ? null : <Menu.Item text="Change FHIR Server" key="change-fhir-server" onClick={this.openChangeFhirServer} />;
+    const menuItems = [<Menu.Item text='Add CDS Services' key='add-services' onClick={this.openAddServices} />,
+      <Menu.Item text='Reset Default Services' key='reset-services' onClick={this.resetServices} />,
+      <Menu.Item text='Configure CDS Services' key='configure-services' onClick={this.openConfigureServices} />,
+      <Menu.Divider key="Divider1" />,
+      <Menu.Item text='Change Patient' key='change-patient' onClick={this.openChangePatient} />];
+    if (!this.props.isSecuredSandbox) {
+      menuItems.push(<Menu.Item text="Change FHIR Server" key="change-fhir-server" onClick={this.openChangeFhirServer} />);
+    }
     const gearMenu = <Menu isOpen={this.state.settingsOpen}
                            onRequestClose={this.closeSettingsMenu}
                            targetRef={this.getSettingsNode} 
                            isArrowDisplayed >
-      <Menu.Item text='Add CDS Services' key='add-services' onClick={this.openAddServices} />
-      <Menu.Item text='Reset Default Services' key='reset-services' onClick={this.resetServices} />
-      <Menu.Item text='Configure CDS Services' key='configure-services' onClick={this.openConfigureServices} />
-      <Menu.Divider key="Divider1" />
-      <Menu.Item text='Change Patient' key='change-patient' onClick={this.openChangePatient} />
-      <Menu.Item text='Change FHIR Server' key='change-fhir-server' onClick={this.openChangeFhirServer} />
+      {menuItems}
     </Menu>;
 
     const navigation = <div className={styles['nav-tabs']}>
@@ -168,6 +172,7 @@ const mapStateToProps = (store) => {
     hook: store.hookState.currentHook,
     patientId: store.patientState.currentPatient.id,
     isCardDemoView: store.cardDemoState.isCardDemoView,
+    isSecuredSandbox: store.fhirServerState.accessToken,
   }
 };
 
