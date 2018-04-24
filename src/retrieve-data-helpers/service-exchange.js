@@ -2,6 +2,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 import store from '../store/store';
 import { storeExchange } from '../actions/service-exchange-actions';
+import { productionClientId } from '../config/client-id';
 import generateJWT from './jwt-generator';
 
 const uuidv4 = require('uuid/v4');
@@ -37,8 +38,8 @@ function completePrefetchTemplate(prefetch) {
   const prefetchRequests = Object.assign({}, prefetch);
   Object.keys(prefetchRequests).forEach((prefetchKey) => {
     let prefetchTemplate = prefetchRequests[prefetchKey];
-    prefetchTemplate = prefetchTemplate.replace(/{{\s*Patient\.id\s*}}/g, patient);
-    prefetchTemplate = prefetchTemplate.replace(/{{\s*User\.id\s*}}/g, user);
+    prefetchTemplate = prefetchTemplate.replace(/{{\s*context\.patientId\s*}}/g, patient);
+    prefetchTemplate = prefetchTemplate.replace(/{{\s*user\s*}}/g, user);
     prefetchRequests[prefetchKey] = encodeUriParameters(prefetchTemplate);
   });
   return prefetchRequests;
@@ -109,6 +110,17 @@ function callServices(url, context) {
   }
 
   const hookInstance = uuidv4();
+  const accessTokenProperty = store.getState().fhirServerState.accessToken;
+  let fhirAuthorization;
+  if (accessTokenProperty) {
+    fhirAuthorization = {
+      access_token: accessTokenProperty.access_token,
+      token_type: 'Bearer',
+      expires_in: accessTokenProperty.expires_in,
+      scope: 'patient/*.* user/*.* launch openid profile online_access',
+      subject: productionClientId,
+    };
+  }
   const request = {
     hookInstance,
     hook,
@@ -117,6 +129,9 @@ function callServices(url, context) {
     patient,
     context: activityContext,
   };
+  if (fhirAuthorization) {
+    request.fhirAuthorization = fhirAuthorization;
+  }
 
   const serviceDefinition = state.cdsServicesState.configuredServices[url];
 
