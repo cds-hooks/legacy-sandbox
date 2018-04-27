@@ -251,7 +251,7 @@ const HookEditor = React.createClass({
           />
         </div>
         <div>
-          <i>Note: See <a href='http://cds-hooks.org/#discovery'>documentation</a> for more details regarding the Discovery endpoint.</i>
+          <i>Note: See <a href='https://cds-hooks.org/specification/1.0/#discovery'>documentation</a> for more details regarding the Discovery endpoint.</i>
         </div>
       </Modal.Body>
       <Modal.Footer>
