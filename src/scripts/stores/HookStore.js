@@ -47,7 +47,7 @@ function getJWT(hookUrl) {
 
   function buildJwt(hookUrl, data) {
     var payload = JSON.stringify({
-      iss: `${window.location.protocol}//sandbox.cds-hooks.org`,
+      iss: `${window.location.protocol}//legacy-sandbox.cds-hooks.org`,
       aud: hookUrl,
       exp: Math.round((Date.now() / 1000) + 3600),
       iat: Math.round((Date.now() / 1000)),
@@ -66,7 +66,7 @@ function getJWT(hookUrl) {
       return ret.resolve(buildJwt(hookUrl, window.sessionStorage['privatePem']));
     } else {
       $.ajax({
-        url: 'https://raw.githubusercontent.com/cds-hooks/sandbox/master/ecprivatekey.pem',
+        url: 'https://raw.githubusercontent.com/cds-hooks/legacy-sandbox/master/ecprivatekey.pem',
         success: function(data) {
           window.sessionStorage['privatePem'] = data;
           return ret.resolve(buildJwt(hookUrl, data))

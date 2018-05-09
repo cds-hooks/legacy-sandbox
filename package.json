@@ -71,7 +71,7 @@
   "license": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cds-hooks/sandbox.git"
+    "url": "https://github.com/cds-hooks/legacy-sandbox.git"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/preprocessor.js",

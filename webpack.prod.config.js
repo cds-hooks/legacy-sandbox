@@ -18,7 +18,7 @@ module.exports = {
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
-      "runtime.CDS_HOOKS_URL": JSON.stringify(process.env.CDS_HOOKS_URL || "https://fhir-org-cds-services.appspot.com"),
+      "runtime.CDS_HOOKS_URL": JSON.stringify(process.env.CDS_HOOKS_URL || "https://20180208t104342-dot-fhir-org-cds-services.appspot.com"),
       "runtime.FHIR_URL": JSON.stringify(process.env.FHIR_URL || "https://api.hspconsortium.org/cdshooksdstu2/open")
     })
   ],
