@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>CDS Hooks Sandbox</title>
+    <script src='fhir-client.min.js'></script>
+  </head>
+  <body>
+    <script>
+      FHIR.oauth2.authorize({
+        'client_id': '24fe546d-f9e0-4d64-9d78-c0fc9f7dcf5a',
+        'scope': 'patient/*.* user/*.* launch openid profile online_access'
+      });
+    </script>
+  </body>
+</html>
