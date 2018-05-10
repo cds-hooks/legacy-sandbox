@@ -1,8 +1,10 @@
 # CDS Hooks Sandbox
 
+> This is a retired version of the CDS Hooks Sandbox. To visit the new Sandbox repository, go to [https://github.com/cds-hooks/sandbox](https://github.com/cds-hooks/sandbox).
+
 The CDS Hooks Sandbox (coined here as "Sandbox") is a tool that allows users to simulate the workflow of the [CDS Hooks](http://cds-hooks.org/) standard. It acts as a sort of "mock"-EHR that can be used as a demonstration tool for showing how CDS Hooks would work with an EHR system, as well as a testing tool to try out different CDS Services to ensure compatibility with the spec.
 
-Try out the live tool at [http://sandbox.cds-hooks.org](http://sandbox.cds-hooks.org)!
+Try out the live tool at [http://legacy-sandbox.cds-hooks.org](http://legacy-sandbox.cds-hooks.org)!
 
 
 ## How it Works
@@ -37,7 +39,17 @@ The tool also allows for testing against different patients and FHIR servers.
 
 ## Testing w/ Secured FHIR Servers
 
-Currently, launching the Sandbox by simply navigating to `http://sandbox.cds-hooks.org` means the tool can only be tested against an open FHIR server endpoint. However, the Sandbox tool can be launched as a SMART application from an [HSPC sandbox instance](https://sandbox.hspconsortium.org), and the tool can then test against a secured FHIR server endpoint. This endpoint would be the FHIR server of the HSPC sandbox instance the CDS Hooks Sandbox is launched from. By default, an app is configured on each HSPC sandbox, CDS Hooks Sandbox, which allows users to launch the Sandbox as a SMART app from their own HSPC instance and test the Sandbox against a secured FHIR endpoint.
+Currently, launching the Sandbox by simply navigating to `http://legacy-sandbox.cds-hooks.org` means the tool can only be tested against an open FHIR server endpoint. However, the Sandbox tool can be launched as a SMART application from an [HSPC sandbox instance](https://sandbox.hspconsortium.org), and the tool can then test against a secured FHIR server endpoint. This endpoint would be the FHIR server of the HSPC sandbox instance the CDS Hooks Sandbox is launched from. Follow the steps below to follow a SMART launch for the Sandbox.
+
+1. Fork this repository so you have your own local copy of this project
+2. Register a provider app on your HSPC instance for this Legacy Sandbox
+  - Launch URL: `https://{your-github-username}.github.io/legacy-sandbox/launch.html`
+  - Redirect URI: `https://{your-github-username}.github.io/legacy-sandbox/`
+  - Register the following scopes with your application (`patient/*.* user/*.* launch openid profile online_access`)
+3. Copy the client ID the HSPC Sandbox generates for your app
+4. In your fork of this legacy Sandbox project, replace the `client_id` in `build/launch.html` with the client ID from the HSPC Sandbox, and commit this change (ensure the build folder gets merged to the `gh-pages` branch. If it does not, you can manually commit the `build` folder yourself to the `gh-pages` branch).
+5. Launch the HSPC app you just registered from the HSPC Sandbox, and the legacy sandbox app should be launched securely.
+6. Additional work may need to be done to switch the location of the `ecprivkey.pem` file and any references to `https://legacy-sandbox.cds-hooks.org` in the source code. Check out the `src` folder and make changes as necessary. See below on how to build the project.
 
 Note: When launching the Sandbox in this manner, the option to change the FHIR server in context is removed from the tool. This is because the Sandbox will be passed an `access_token` when launched as a SMART application from HSPC. This token will be passed to CDS Services in requests, and used to query the FHIR server for any additional extra queries down the workflow.
 
@@ -51,7 +63,7 @@ You can develop on and run this project locally by using the following steps bel
 
 Install `nodejs` 6.11+ and `npm` 5.0+ on your machine and then install the project and its dependencies locally:
 ```
-git clone https://github.com/cds-hooks/sandbox.git
+git clone https://github.com/cds-hooks/legacy-sandbox.git
 cd sandbox
 npm install
 ```
@@ -92,7 +104,7 @@ sudo pip install docker-compose
 #### Local dev environment w/ Docker
 
 ```
-git clone https://github.com/cds-hooks/sandbox.git
+git clone https://github.com/cds-hooks/legacy-sandbox.git
 cd sandbox
 sudo docker-compose -f docker-compose-dev.yml  up
 ```
@@ -119,4 +131,4 @@ docker-compose -f docker-compose-dev.yml up
 We welcome any contributions to help further enhance this tool for the CDS Hooks community! To contribute to this project, please see instructions above for running the application locally and testing the app to make sure the tool works as expected with your incorporated changes. Then follow the steps below.
 
 1. At the root level of the project, run `npm run build` to bundle the application code. Please ensure no errors occur during this step.
-2. Issue a pull request on the `cds-hooks/Sandbox` repository with your changes for review. 
+2. Issue a pull request on the `cds-hooks/legacy-sandbox` repository with your changes for review. 
